@@ -185,6 +185,46 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <div className="bg-[#F4F0EC] py-16 w-full flex items-center justify-center">
+        <div className="grid grid-cols-4  w-[70%] divide-x-4">
+          <div className="flex flex-col items-center justify-center">
+            <span
+              className="text-7xl text-[#CDA274]"
+              style={{ fontFamily: `${jost.style.fontFamily}` }}
+            >
+              12
+            </span>
+            <span className="text-[#4D5053]">Years Of Experiance</span>
+          </div>
+          <div className="flex flex-col items-center justify-center">
+            <span
+              className="text-7xl text-[#CDA274]"
+              style={{ fontFamily: `${jost.style.fontFamily}` }}
+            >
+              12
+            </span>
+            <span className="text-[#4D5053]">Years Of Experiance</span>
+          </div>
+          <div className="flex flex-col items-center justify-center">
+            <span
+              className="text-7xl text-[#CDA274]"
+              style={{ fontFamily: `${jost.style.fontFamily}` }}
+            >
+              12
+            </span>
+            <span className="text-[#4D5053]">Years Of Experiance</span>
+          </div>
+          <div className="flex flex-col items-center justify-center">
+            <span
+              className="text-7xl text-[#CDA274]"
+              style={{ fontFamily: `${jost.style.fontFamily}` }}
+            >
+              12
+            </span>
+            <span className="text-[#4D5053]">Years Of Experiance</span>
+          </div>
+        </div>
+      </div>
     </main>
   );
 }
