@@ -27,10 +27,11 @@ body {
     rgb(var(--background-start-rgb)); */
     font-size: 22px;
     background-image: url("/images/Line.svg");
+    background-position: center;
 }
 
 .vacancy-image {
-  background-image: url("/images/Photo.png");
+  background-image: url("/images/Dashboard1.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   border-bottom-left-radius: 300px;

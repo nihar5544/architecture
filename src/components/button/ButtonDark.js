@@ -3,7 +3,7 @@ import React from 'react'
 function ButtonDark({name,handlesubmit}) {
   return (
     <div>
-        <button onClick={handlesubmit} className="flex items-center text-white bg-[#292F36] text-sm rounded-xl p-4 px-6 w-fit">
+        <button onClick={handlesubmit} className="flex items-center text-white bg-[#292F36] text-lg rounded-xl p-6 px-12 w-fit">
            {name}
             <svg
             className="ml-2"
