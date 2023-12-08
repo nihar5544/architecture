@@ -4,14 +4,15 @@ import { DM_Serif_Display } from "next/font/google";
 import ButtonDark from "@/components/button/ButtonDark";
 import ReadmoreCard from "@/components/cards/ReadmoreCard";
 import Icons from "@/components/icons";
+import ContactUs from "@/components/cards/ContactUs";
 const jost = DM_Serif_Display({ weight: "400", subsets: ["latin"] });
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center ">
-      <div className="vacancy-image w-full h-[90vh] flex items-center ">
-        <div className="flex flex-col ml-[20%] w-1/3">
+    <main className="flex min-h-screen flex-col items-center text-center ">
+      <div className="vacancy-image md:rounded-bl-[300px] w-full h-[90vh] flex items-center ">
+        <div className="flex flex-col lg:ml-[20%] lg:w-1/3">
           <span
-            className="text-7xl"
+            className="text-5xl lg:text-7xl"
             style={{ fontFamily: `${jost.style.fontFamily}` }}
           >
             Let Your Home <br></br>Be Unique
@@ -23,8 +24,8 @@ export default function Home() {
           <ButtonDark name={" Get Started"} />
         </div>
       </div>
-      <div className="w-[70%] justify-center items-center">
-        <div className="grid grid-cols-3 gap-x-5 my-40">
+      <div className="lg:w-[70%] justify-center items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 my-40">
           <ReadmoreCard
             title={"Project Plan"}
             contant={
@@ -44,7 +45,7 @@ export default function Home() {
             }
           />
         </div>
-        <div className="grid grid-cols-2 mb-20 ">
+        <div className="grid grid-cols-1 lg:grid-cols-2 mb-20 ">
           <div className="flex flex-col justify-between">
             <span
               className="text-5xl"
@@ -71,7 +72,7 @@ export default function Home() {
               <ButtonDark name={"Get Free Estimate"} />
             </div>
           </div>
-          <div className="flex items-end justify-end">
+          <div className="flex items-end justify-end ">
             <Image
               // eslint-disable-next-line no-undef
               src={`/images/Dashboard2.png`}
@@ -93,7 +94,7 @@ export default function Home() {
             It is a long established fact that a reader will be distracted by
             the of readable content of page lookings at its layouts points.
           </span>
-          <div className="grid grid-cols-2 gap-x-32 gap-y-24 my-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-32 gap-y-24 my-20">
             <div className="flex flex-col">
               <Image
                 // eslint-disable-next-line no-undef
@@ -186,7 +187,7 @@ export default function Home() {
         </div>
       </div>
       <div className="bg-[#F4F0EC] py-16 w-full flex items-center justify-center">
-        <div className="grid grid-cols-4  w-[70%] divide-x-4">
+        <div className="grid grid-cols-1 lg:grid-cols-4  w-[70%] gap-y-4 lg:divide-x-4">
           <div className="flex flex-col items-center justify-center">
             <span
               className="text-7xl text-[#CDA274]"
@@ -224,6 +225,9 @@ export default function Home() {
             <span className="text-[#4D5053]">Years Of Experiance</span>
           </div>
         </div>
+      </div>
+      <div className="my-20 lg:w-[70%]">
+        <ContactUs />
       </div>
     </main>
   );

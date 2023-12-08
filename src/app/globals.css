@@ -34,5 +34,5 @@ body {
   background-image: url("/images/Dashboard1.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  border-bottom-left-radius: 300px;
+  /* border-bottom-left-radius: 300px; */
 }

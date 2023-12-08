@@ -23,7 +23,7 @@ function Header() {
           <div className="flex justify-between items-center  py-4 w-[60%]">
             <Link href="/">Home</Link>
             <Link href="/services">Services</Link>
-            <Link href="/project">Projects</Link>
+            <Link href="/projects">Projects</Link>
             <Link href="/contact">Contact</Link>
           </div>
         </div>
