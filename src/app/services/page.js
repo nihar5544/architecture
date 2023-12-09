@@ -3,9 +3,9 @@ import PageHeader from "@/components/navigationbar/PageHeader";
 import Image from "next/image";
 import React from "react";
 import { DM_Serif_Display } from "next/font/google";
+const jost = DM_Serif_Display({ weight: "400", subsets: ["latin"] });
 import Icons from "@/components/icons";
 import ContactUs from "@/components/cards/ContactUs";
-const jost = DM_Serif_Display({ weight: "400", subsets: ["latin"] });
 function page() {
   return (
     <div className="w-full flex flex-col justify-center items-center">

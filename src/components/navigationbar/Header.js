@@ -1,10 +1,13 @@
 "use client";
 import Image from "next/image";
+
+import MobileHeader from "./MobileHeader.js";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 function Header() {
   const pathname = usePathname();
+  const [hideLogo, setHideLogo] = useState(false);
   return (
     <div className="flex items-center justify-center sticky top-0 z-[999] backdrop-blur-md border-b-2">
       <div className="container-padding-x lg:block flex w-[60%] hidden">
@@ -15,7 +18,7 @@ function Header() {
               src={`/images/Logo.png`}
               width={150}
               height={60}
-              alt="coindelta-logo"
+              alt="mcad-logo"
               className="py-[10px]"
             />
       
@@ -28,6 +31,13 @@ function Header() {
           </div>
         </div>
       </div>
+      <div className="lg:hidden block">
+          <MobileHeader
+            setHideLogo={setHideLogo}
+            hideLogo={hideLogo}
+            suppressHydrationWarning
+          />
+        </div>
     </div>
   );
 }
