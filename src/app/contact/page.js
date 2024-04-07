@@ -7,7 +7,7 @@ import ButtonDark from "@/components/button/ButtonDark";
 const jost = DM_Serif_Display({ weight: "400", subsets: ["latin"] });
 function page() {
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center one fadeIn animate">
       <PageHeader name="Contact Us" />
       <div className="lg:w-[70%] flex flex-col items-center justify-center">
         <span

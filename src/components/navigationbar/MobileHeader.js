@@ -14,7 +14,7 @@ import {
   SwipeableDrawer,
 } from "@mui/material";
 import Link from "next/link";
-import './style.css'
+import "./style.css";
 export default function SwipeableTemporaryDrawer({ setHideLogo, hideLogo }) {
   // const [isConsultingServicesOpen, setIsConsultingServicesOpen] =
   //   React.useState(true);
@@ -45,7 +45,11 @@ export default function SwipeableTemporaryDrawer({ setHideLogo, hideLogo }) {
   const list = (anchor) => (
     // {isOpen?
     <Box
-      sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : "150px", bgcolor:"white" ,overflowY:"unset" }}
+      sx={{
+        width: anchor === "top" || anchor === "bottom" ? "auto" : "150px",
+        bgcolor: "white",
+        overflowY: "unset",
+      }}
       role="presentation"
     >
       <div className="flex justify-between p-4 header">
@@ -129,13 +133,13 @@ export default function SwipeableTemporaryDrawer({ setHideLogo, hideLogo }) {
     </Box>
   );
   return (
-    <div className="sm:pl-[3rem]  h-[80px] flex justify-center items-center">
+    <div className="sm:pl-[3rem]  h-[80px] flex justify-center items-center w-full">
       {["top"].map((anchor) => (
         <React.Fragment key={anchor}>
-          <div className="flex items-center">
+          <div className="flex items-center w-full justify-around">
             <span
               onClick={toggleDrawer(anchor, true)}
-              className="cursor-pointer text-[25px] flex"
+              className="cursor-pointer text-[25px] flex "
             >
               &#9776;
             </span>
@@ -153,7 +157,6 @@ export default function SwipeableTemporaryDrawer({ setHideLogo, hideLogo }) {
             )}
           </div>
           <SwipeableDrawer
-    
             anchor={anchor}
             open={state[anchor]}
             variant="persistent"

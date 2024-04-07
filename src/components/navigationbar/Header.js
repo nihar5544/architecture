@@ -9,7 +9,7 @@ function Header() {
   const pathname = usePathname();
   const [hideLogo, setHideLogo] = useState(false);
   return (
-    <div className="flex items-center justify-center sticky top-0 z-[999] backdrop-blur-md border-b-2">
+    <div className="flex items-center justify-center sticky top-0 z-40 backdrop-blur-md border-b-2">
       <div className="container-padding-x lg:block flex w-[60%] hidden">
         <div className="flex justify-between font-medium text-[18px]">
           <Link href="/" className="flex items-center">
@@ -31,7 +31,7 @@ function Header() {
           </div>
         </div>
       </div>
-      <div className="lg:hidden block">
+      <div className="lg:hidden block w-full">
           <MobileHeader
             setHideLogo={setHideLogo}
             hideLogo={hideLogo}

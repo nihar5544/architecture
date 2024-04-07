@@ -8,7 +8,7 @@ import Icons from "@/components/icons";
 import ContactUs from "@/components/cards/ContactUs";
 function page() {
   return (
-    <div className="w-full flex flex-col justify-center items-center">
+    <div className="w-full flex flex-col justify-center items-center one fadeIn animate">
       <PageHeader name={"Services"} />
       <div className="lg:w-[70%] flex flex-col">
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 my-40">

@@ -1,3 +1,4 @@
+"use client";
 import Header from "@/components/navigationbar/Header";
 import Image from "next/image";
 import { DM_Serif_Display } from "next/font/google";
@@ -5,12 +6,20 @@ import ButtonDark from "@/components/button/ButtonDark";
 import ReadmoreCard from "@/components/cards/ReadmoreCard";
 import Icons from "@/components/icons";
 import ContactUs from "@/components/cards/ContactUs";
+import { useState } from "react";
+import ScrollAnimation from "@/components/ui/Animation";
 const jost = DM_Serif_Display({ weight: "400", subsets: ["latin"] });
 export default function Home() {
+  const [triggered, setTriggered] = useState(true);
+  const [triggered2, setTriggered2] = useState(false);
+  const [triggered3, setTriggered3] = useState(false);
+  const [triggered4, setTriggered4] = useState(false);
+  const [triggered5, setTriggered5] = useState(false);
   return (
-    <main className="flex min-h-screen flex-col items-center text-center ">
+    <main className="flex min-h-screen flex-col items-center text-center one fadeIn animate">
       <div className="vacancy-image md:rounded-bl-[300px] w-full h-[90vh] flex items-center ">
-        <div className="flex flex-col lg:ml-[20%] lg:w-1/3">
+      <ScrollAnimation setTriggered={setTriggered} triggered={triggered} />
+        <div className={`flex flex-col lg:ml-[20%] lg:w-1/3 ${triggered ? " animate fadeInUp " : "hidden"}`}>
           <span
             className="text-5xl lg:text-7xl"
             style={{ fontFamily: `${jost.style.fontFamily}` }}
@@ -25,7 +34,8 @@ export default function Home() {
         </div>
       </div>
       <div className="lg:w-[70%] justify-center items-center">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 my-40">
+      <ScrollAnimation setTriggered={setTriggered2} triggered={triggered2} />
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 my-40 ${triggered2 ? "animate fadeInDown two" : "hidden"}`}>
           <ReadmoreCard
             title={"Project Plan"}
             contant={
@@ -45,8 +55,9 @@ export default function Home() {
             }
           />
         </div>
+           <ScrollAnimation setTriggered={setTriggered3} triggered={triggered3} />
         <div className="grid grid-cols-1 lg:grid-cols-2 mb-20 ">
-          <div className="flex flex-col justify-between">
+          <div className={`flex flex-col justify-between ${triggered3 ? "animate fadeInLeft two" : "hidden"}`}>
             <span
               className="text-5xl"
               style={{ fontFamily: `${jost.style.fontFamily}` }}
@@ -72,7 +83,7 @@ export default function Home() {
               <ButtonDark name={"Get Free Estimate"} />
             </div>
           </div>
-          <div className="flex items-end justify-end ">
+          <div className={`flex items-end justify-end ${triggered3 ? "animate fadeInRight two" : "hidden"}`}>
             <Image
               // eslint-disable-next-line no-undef
               src={`/images/Dashboard2.png`}
@@ -83,7 +94,8 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="flex flex-col items-center my-40">
+        <ScrollAnimation setTriggered={setTriggered4} triggered={triggered4} />
+        <div className={`flex flex-col items-center my-40 ${triggered4 ? "animate fadeInUp two" : "hidden"}`}>
           <span
             className="text-5xl"
             style={{ fontFamily: `${jost.style.fontFamily}` }}
@@ -187,7 +199,8 @@ export default function Home() {
         </div>
       </div>
       <div className="bg-[#F4F0EC] py-16 w-full flex items-center justify-center">
-        <div className="grid grid-cols-1 lg:grid-cols-4  w-[70%] gap-y-4 lg:divide-x-4">
+      <ScrollAnimation setTriggered={setTriggered5} triggered={triggered5} />
+        <div className={`grid grid-cols-1 lg:grid-cols-4  w-[70%] gap-y-4 lg:divide-x-4 ${triggered5 ? "animate fadeInUp two" : "hidden"}`}>
           <div className="flex flex-col items-center justify-center">
             <span
               className="text-7xl text-[#CDA274]"
