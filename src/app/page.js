@@ -19,7 +19,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center text-center one fadeIn animate">
       <div className="vacancy-image md:rounded-bl-[300px] w-full h-[90vh] flex items-center ">
       <ScrollAnimation setTriggered={setTriggered} triggered={triggered} />
-        <div className={`flex flex-col lg:ml-[20%] lg:w-1/3 ${triggered ? " animate fadeInUp " : "hidden"}`}>
+        <div className={`flex flex-col lg:ml-[20%] lg:w-1/3 max-sm:p-5 ${triggered ? " animate fadeInUp " : "hidden"}`}>
           <span
             className="text-5xl lg:text-7xl"
             style={{ fontFamily: `${jost.style.fontFamily}` }}
@@ -35,7 +35,7 @@ export default function Home() {
       </div>
       <div className="lg:w-[70%] justify-center items-center">
       <ScrollAnimation setTriggered={setTriggered2} triggered={triggered2} />
-        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 my-40 ${triggered2 ? "animate fadeInDown two" : "hidden"}`}>
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 my-40 max-sm:p-5 ${triggered2 ? "animate fadeInDown two" : "hidden"}`}>
           <ReadmoreCard
             title={"Project Plan"}
             contant={
@@ -57,7 +57,7 @@ export default function Home() {
         </div>
            <ScrollAnimation setTriggered={setTriggered3} triggered={triggered3} />
         <div className="grid grid-cols-1 lg:grid-cols-2 mb-20 ">
-          <div className={`flex flex-col justify-between ${triggered3 ? "animate fadeInLeft two" : "hidden"}`}>
+          <div className={`flex flex-col justify-between max-sm:p-5 ${triggered3 ? "animate fadeInLeft two" : "hidden"}`}>
             <span
               className="text-5xl"
               style={{ fontFamily: `${jost.style.fontFamily}` }}
@@ -83,7 +83,7 @@ export default function Home() {
               <ButtonDark name={"Get Free Estimate"} />
             </div>
           </div>
-          <div className={`flex items-end justify-end ${triggered3 ? "animate fadeInRight two" : "hidden"}`}>
+          <div className={`flex items-end justify-end max-sm:p-5 ${triggered3 ? "animate fadeInRight two" : "hidden"}`}>
             <Image
               // eslint-disable-next-line no-undef
               src={`/images/Dashboard2.png`}
@@ -95,7 +95,7 @@ export default function Home() {
           </div>
         </div>
         <ScrollAnimation setTriggered={setTriggered4} triggered={triggered4} />
-        <div className={`flex flex-col items-center my-40 ${triggered4 ? "animate fadeInUp two" : "hidden"}`}>
+        <div className={`flex flex-col items-center my-40 max-sm:p-5 ${triggered4 ? "animate fadeInUp two" : "hidden"}`}>
           <span
             className="text-5xl"
             style={{ fontFamily: `${jost.style.fontFamily}` }}
@@ -200,7 +200,7 @@ export default function Home() {
       </div>
       <div className="bg-[#F4F0EC] py-16 w-full flex items-center justify-center">
       <ScrollAnimation setTriggered={setTriggered5} triggered={triggered5} />
-        <div className={`grid grid-cols-1 lg:grid-cols-4  w-[70%] gap-y-4 lg:divide-x-4 ${triggered5 ? "animate fadeInUp two" : "hidden"}`}>
+        <div className={`grid grid-cols-1 lg:grid-cols-4  w-[70%] gap-y-4 lg:divide-x-4 max-sm:p-5 ${triggered5 ? "animate fadeInUp two" : "hidden"}`}>
           <div className="flex flex-col items-center justify-center">
             <span
               className="text-7xl text-[#CDA274]"
