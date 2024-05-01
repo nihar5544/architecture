@@ -1,7 +1,19 @@
-import React from "react";
+'use client';
+import React, { useEffect } from "react";
 import { DM_Serif_Display } from "next/font/google";
 import ImageZoom from "@/components/Image/ImageZoom";
+import axios from "axios";
 function page() {
+  const [data, setData] = useState()
+  
+  useEffect(() => {
+    axios.get("/api/projectDetails").then((res) => {
+      console.log(res.data);
+      setData(res.data)
+    }).catch((err) => {
+      console.log(err);
+    })
+  },[])
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="w-full h-[350px] bg-[url('/images/Sevices-header.png')]" />
