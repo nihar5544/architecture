@@ -17,10 +17,30 @@ export default async function handler(req, res) {
               foreignField: 'Clint',
               as: 'details'
             }
+          },
+          {
+            $unwind: '$details' // Unwind the details array
+          },
+          {
+            $addFields: {
+              title: '$details.title', // Copy title from projectdetails to title
+              Category: '$details.Category', // Copy Category from projectdetails to Category
+              image: '$details.image' // Copy image from projectdetails to image
+            }
+          },
+          {
+            $group: {
+              _id: '$_id',
+              details: { $push: '$details' }, // Re-group the details array
+              title: { $first: '$title' }, // Keep the first title
+              Category: { $first: '$Category' }, // Keep the first Category
+              image: { $first: '$image' } // Keep the first image
+            }
           }
         ]);
         res.status(200).json({ success: true, data: projects });
       } catch (error) {
+        console.error(error);
         res.status(400).json({ success: false });
       }
       break;

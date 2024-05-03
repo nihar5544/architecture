@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useState } from "react";
 
-const page = () => {
+const Admin = () => {
   const [client, setClient] = useState("");
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
@@ -14,20 +14,24 @@ const page = () => {
   const [imageBase64, setImageBase64] = useState("");
   const [otherImages, setOtherImages] = useState([]);
   const [otherImagesBase64, setOtherImagesBase64] = useState([]);
-
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       setImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImageBase64(reader.result);
+        let base64String = reader.result;
+        // Remove the data URL prefix
+        base64String = base64String.replace(/^data:image\/(jpeg|jpg);base64,/, '');
+        setImageBase64(base64String);
         console.log(reader);
       };
       reader.readAsDataURL(file);
     }
   };
-
+  
   const handleOtherImagesChange = (event) => {
     const files = event.target.files;
     if (files) {
@@ -45,21 +49,11 @@ const page = () => {
     // Perform validation here
     // For example, check if required fields are filled
     // If validation passes, you can submit the form data
-    const formData = new FormData();
-    formData.append("Client", client);
-    formData.append("Category", category);
-    formData.append("Location", location);
-    formData.append("Date", date);
-    formData.append("Link", link);
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("image", imageBase64);
-    formData.append("otherImage", otherImagesBase64);
-
+    setLoading(true);
     const body = {
       Client: client,
       Category: category,
-      location: location,
+      Location: location,
       Date: date,
       Link: link,
       title: title,
@@ -71,8 +65,13 @@ const page = () => {
     axios
       .post("http://localhost:3000/api/projectDetails", body)
       .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error(error));
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
   };
 
   return (
@@ -237,13 +236,16 @@ const page = () => {
         </div>
       </div>
       <button
+        disabled={loading}
         type="submit"
         className="px-4 py-2 bg-blue-500 text-white rounded"
       >
         Submit
       </button>
+
+      {error && <p className="mt-2 text-red-500">{error}</p>}
     </form>
   );
 };
 
-export default page;
+export default Admin;

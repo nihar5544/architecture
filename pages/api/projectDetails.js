@@ -17,24 +17,30 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
+        // Check if there's an ID parameter in the query
+        if (req.query.id) {
+          const projectDetail = await ProjectDetails.findById(req.query.id);
+          if (!projectDetail) {
+            return res.status(404).json({ success: false, message: 'Project detail not found' });
+          }
+          return res.status(200).json({ success: true, data: projectDetail });
+        }
+        // If no ID is provided, return all project details
         const projectDetails = await ProjectDetails.find({});
-        res.status(200).json({ success: true, data: projectDetails });
+        return res.status(200).json({ success: true, data: projectDetails });
       } catch (error) {
-        res.status(400).json({ success: false });
+        return res.status(400).json({ success: false, error });
       }
-      break;
     case 'POST':
       try {
         const { Client, Category, Location, Date, Link, title, description, image, otherImage } = req.body;
         const projectDetail = await ProjectDetails.create({ Client, Category, Location, Date, Link, title, description, image: image ? `data:image/jpeg;base64,${image}` : null, otherImage });
-        res.status(201).json({ success: true, data: projectDetail });
+        return res.status(201).json({ success: true, data: projectDetail });
       } catch (error) {
-        res.status(400).json({ success: false , error});
+        return res.status(400).json({ success: false, error });
       }
-      break;
     // Add cases for PATCH and DELETE if needed
     default:
-      res.status(400).json({ success: false });
-      break;
+      return res.status(400).json({ success: false });
   }
 }
