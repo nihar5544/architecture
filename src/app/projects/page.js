@@ -4,7 +4,7 @@ import PageHeader from "@/components/navigationbar/PageHeader";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-function page() {
+function Project() {
   const [data, setData] = useState();
   useEffect(() => {
     axios
@@ -37,4 +37,4 @@ function page() {
   );
 }
 
-export default page;
+export default Project;
