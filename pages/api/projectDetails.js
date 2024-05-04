@@ -9,7 +9,6 @@ export const config = {
     },
   },
   // Specifies the maximum allowed duration for this function to execute (in seconds)
-  maxDuration: 5,
 }
 export default async function handler(req, res) {
   const { method } = req;

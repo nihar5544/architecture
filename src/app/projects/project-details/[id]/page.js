@@ -5,25 +5,30 @@ import ImageZoom from "@/components/Image/ImageZoom";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import Image from "next/image";
+import BuildingLoading from "@/components/loader/pageLoader";
 
 function ProjectDetails() {
   const [data, setData] = useState();
+  const [loading, setLoading] = useState(true);
   const params = useParams();
   console.log("id", params.id, data);
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`/api/projectDetails?id=${params?.id}`)
       .then((res) => {
-        console.log(res?.data?.data);
         setData(res.data?.data);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       });
   }, []);
   console.log(data);
   return (
-    <div className="flex flex-col items-center justify-center">
+    <>
+    {loading ? <BuildingLoading /> :<div className="flex flex-col items-center justify-center">
       <div className="w-full ">
         <Image
           src={data?.image}
@@ -66,7 +71,8 @@ function ProjectDetails() {
             ))}{" "}
         </div>
       </div>{" "}
-    </div>
+    </div>}
+    </>
   );
 }
 

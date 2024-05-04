@@ -46,9 +46,7 @@ const Admin = () => {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Perform validation here
-    // For example, check if required fields are filled
-    // If validation passes, you can submit the form data
+
     setLoading(true);
     const body = {
       Client: client,
@@ -63,10 +61,21 @@ const Admin = () => {
     };
     console.log(image, imageBase64, otherImages, otherImagesBase64);
     axios
-      .post("http://localhost:3000/api/projectDetails", body)
+      .post("/api/projectDetails", body)
       .then((response) => response.json())
       .then(() => {
         setLoading(false);
+        setClient("");
+        setCategory("");
+        setLocation("");
+        setDate("");
+        setLink("");
+        setTitle("");
+        setDescription("");
+        setImage(null);
+        setImageBase64("");
+        setOtherImages([]);
+        setOtherImagesBase64([]);
       })
       .catch((error) => {
         console.error(error);
