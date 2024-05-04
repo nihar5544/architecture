@@ -11,6 +11,10 @@ export const config = {
   // Specifies the maximum allowed duration for this function to execute (in seconds)
 }
 export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
   const { method } = req;
 
   switch (method) {
