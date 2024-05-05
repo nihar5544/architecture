@@ -66,7 +66,6 @@ function ProjectDetails() {
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center justify-center mb-20">
           {data?.otherImage &&
-            data?.otherImage?.lenght > 0 &&
             data?.otherImage?.map((item, index) => (
               <ImageZoom key={index} imageUrl={item} />
             ))}{" "}

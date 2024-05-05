@@ -9,7 +9,7 @@ function PropertyCard({ key, data }) {
   return (
     <div key={key} className="w-full flex justify-center ">
       <div className="card cursor-pointer">
-        <a href={`/projects/project-details/${data?._id}`}>
+        <a href={`/project-details/${data?._id}`}>
           <div className="overflow-hidden">
             <Image
               src={data?.image}

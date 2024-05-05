@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-const ImageZoom = ({ imageUrl }) => {
+const ImageZoom = ({key, imageUrl }) => {
   const [isZoomed, setIsZoomed] = useState(false);
 
   const toggleZoom = () => {
@@ -9,7 +9,7 @@ const ImageZoom = ({ imageUrl }) => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative" key={key}>
       <Image
         src={imageUrl}
         alt="Image"
