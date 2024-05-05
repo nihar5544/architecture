@@ -1,5 +1,5 @@
-import dbConnect from '../../utils/dbConnect';
-import Project from '../../models/Project';
+import dbConnect from '../../../utils/dbConnect';
+import Project from '../../../models/Project';
 
 dbConnect();
 
