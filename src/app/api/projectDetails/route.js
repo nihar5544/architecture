@@ -11,25 +11,11 @@ import { NextResponse } from "next/server";
 //   // Specifies the maximum allowed duration for this function to execute (in seconds)
 //   maxDuration: 5,
 // }
-export async function GET(request, { params }) {
+export async function GET() {
   try {
     await dbConnect();
     
-    const { id } = params;
-    log(id, "iddddddddddddddd");
-    if (id) {
-      const projectDetail = await ProjectDetails.findById(id);
-      if (!projectDetail) {
-        return NextResponse.json(
-          { success: false, message: "Project detail not found" },
-          { status: 404 }
-        );
-      }
-      return NextResponse.json(
-        { success: true, data: projectDetail },
-        { status: 200 }
-      );
-    }
+   
     // If no ID is provided, return all project details
     const projectDetails = await ProjectDetails.find({});
     return NextResponse.json(

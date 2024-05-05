@@ -1,7 +1,6 @@
 // components/BuildingLoading.js
 
 import React from "react";
-import "./style.css";
 
 const BuildingLoading = () => {
   return (

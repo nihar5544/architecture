@@ -6,6 +6,7 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import BuildingLoading from "@/components/loader/pageLoader";
+import Link from "next/link";
 
 function ProjectDetails() {
   const [data, setData] = useState();
@@ -15,7 +16,7 @@ function ProjectDetails() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`/api/projectDetails?id=${params?.id}`)
+      .get(`/api/projectDetails/${params?.id}`)
       .then((res) => {
         setData(res.data?.data);
         setLoading(false);
@@ -39,7 +40,7 @@ function ProjectDetails() {
         />
       </div>
       <div className="lg:max-w-[70%] max-w-[90%]">
-        <div className="flex max-sm:flex-col gap-10 my-28">
+        <div className="grid max-sm:grid-cols-1 grid-cols-3  gap-10 my-28">
           <div className="bg-[#F4F0EC] p-10 flex rounded-[50px] max-h-72 max-w-xl text-[#4D5053]">
             <div className="grid grid-cols-2">
               <span className="font-serif font-bold mr-10">Client</span>
@@ -53,10 +54,10 @@ function ProjectDetails() {
               <span className="font-serif font-bold mr-10">Date</span>
               <span className="font-jost ">{data?.Date}</span>
               <span className="font-serif font-bold mr-10">Link</span>
-              <span className="font-jost ">{data?.Link}</span>
+              <Link href={data?.Link} target="_blank" className="font-jost underline truncate">{data?.Link}</Link>
             </div>
           </div>
-          <div className="flex flex-col items-center max-w-3xl">
+          <div className="flex flex-col items-center max-w-3xl col-span-2">
             <span className="font-serif font-bold text-[#292F36] text-5xl">
               {data?.title}
             </span>
@@ -65,7 +66,7 @@ function ProjectDetails() {
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center justify-center mb-20">
           {data?.otherImage &&
-            data?.otherImage?.lenght &&
+            data?.otherImage?.lenght > 0 &&
             data?.otherImage?.map((item, index) => (
               <ImageZoom key={index} imageUrl={item} />
             ))}{" "}
