@@ -200,13 +200,13 @@ export default function Home() {
       </div>
       <div className="bg-[#F4F0EC] py-16 w-full flex items-center justify-center">
       <ScrollAnimation setTriggered={setTriggered5} triggered={triggered5} />
-        <div className={`grid grid-cols-1 lg:grid-cols-4  w-[70%] gap-y-4 lg:divide-x-4 max-sm:p-5 ${triggered5 ? "animate fadeInUp two" : "hidden"}`}>
+        <div className={`grid grid-cols-1 lg:grid-cols-4  w-[70%] gap-y-4 lg:divide-x-4 max-sm:p-5 ${triggered5 ? "animate fadeInUp one" : "hidden"}`}>
           <div className="flex flex-col items-center justify-center">
             <span
               className="text-7xl text-[#CDA274]"
               style={{ fontFamily: `${jost.style.fontFamily}` }}
             >
-              12
+              25+
             </span>
             <span className="text-[#4D5053]">Years Of Experiance</span>
           </div>
@@ -215,27 +215,27 @@ export default function Home() {
               className="text-7xl text-[#CDA274]"
               style={{ fontFamily: `${jost.style.fontFamily}` }}
             >
-              12
+              85+
             </span>
-            <span className="text-[#4D5053]">Years Of Experiance</span>
+            <span className="text-[#4D5053]">Success Project</span>
           </div>
           <div className="flex flex-col items-center justify-center">
             <span
               className="text-7xl text-[#CDA274]"
               style={{ fontFamily: `${jost.style.fontFamily}` }}
             >
-              12
+              3+
             </span>
-            <span className="text-[#4D5053]">Years Of Experiance</span>
+            <span className="text-[#4D5053]">Active Project</span>
           </div>
           <div className="flex flex-col items-center justify-center">
             <span
               className="text-7xl text-[#CDA274]"
               style={{ fontFamily: `${jost.style.fontFamily}` }}
             >
-              12
+              100+
             </span>
-            <span className="text-[#4D5053]">Years Of Experiance</span>
+            <span className="text-[#4D5053]">Happy Customers</span>
           </div>
         </div>
       </div>

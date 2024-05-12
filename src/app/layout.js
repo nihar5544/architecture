@@ -2,6 +2,7 @@ import { Jost } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/navigationbar/Header'
 import Footer from '@/components/footer/Footer'
+import { Toaster } from 'sonner'
 
 const jost = Jost({ subsets: ['latin'] })
 
@@ -17,6 +18,8 @@ export default function RootLayout({ children }) {
       <body className={`${jost.className } max-w-[2100px] mx-auto` } >
       <Header />
         {children}
+        <Toaster richColors  />
+
         <Footer /></body>
     </html>
   )

@@ -10,6 +10,10 @@ const projectDetailsSchema = new mongoose.Schema({
   description: String,
   image: String,
   otherImage: Array,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 module.exports = mongoose.models.ProjectDetail || mongoose.model('ProjectDetail', projectDetailsSchema);

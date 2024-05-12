@@ -36,10 +36,7 @@ function Project() {
               data.map((item, index) => (
                 <PropertyCard key={index} data={item} />
               ))}
-            {/* <PropertyCard />
-          <PropertyCard />
-          <PropertyCard />
-          <PropertyCard /> */}
+          
           </div>
         </div>
       )}
