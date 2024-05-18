@@ -1,24 +1,26 @@
 import { dbConnect } from "../../../../../utils/dbConnect";
-import ProjectDetails from "../../../../../models/ProjectDetails";
+import ProjectDetail from "../../../../../models/ProjectDetails";
 import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
   const { id } = params;
   try {
+    await dbConnect();
+
     if (id) {
-      await dbConnect();
-      const projectDetail = await ProjectDetails.findById(id);
+      const projectDetail = await ProjectDetail.findById(id);
       if (!projectDetail) {
-        return "Project detail not found!", 404, false;
+        return NextResponse.json(
+          { success: false, message: "Project detail not found!" },
+          { status: 404 }
+        );
       }
-      
       return NextResponse.json(
         { success: true, data: projectDetail },
         { status: 200 }
       );
     } else {
-      // If no ID is provided, return all project details
-      const allProjectDetails = await ProjectDetails.find();
+      const allProjectDetails = await ProjectDetail.find();
       return NextResponse.json(
         { success: true, data: allProjectDetails },
         { status: 200 }
@@ -26,30 +28,44 @@ export async function GET(request, { params }) {
     }
   } catch (error) {
     console.log(error);
-    return "Error in getting data !!", 404, false;
+    return NextResponse.json(
+      { success: false, message: "Error in getting data!" },
+      { status: 500 }
+    );
   }
 }
 
-export async function PUT(request, { params, body }) {
-  const { id } = params;
-  const { newData } = body;
+export async function PUT(request, { params }) {
   try {
+    const { id } = params;
     await dbConnect();
-    const updatedProjectDetail = await ProjectDetails.findByIdAndUpdate(
-      id,
-      newData,
-      { new: true }
-    );
-    if (!updatedProjectDetail) {
-      return "Project detail not found!", 404, false;
+
+    const { title, description, image, otherImage } = await request.json();
+
+    let projectDetail = await ProjectDetail.findById(id);
+    if (!projectDetail) {
+      return NextResponse.json(
+        { success: false, message: "Project detail not found!" },
+        { status: 404 }
+      );
     }
+
+    projectDetail.title = title;
+    projectDetail.description = description;
+    projectDetail.image = image;
+    projectDetail.otherImage = otherImage;
+
+    const updatedProjectDetail = await projectDetail.save();
     return NextResponse.json(
       { success: true, data: updatedProjectDetail },
       { status: 200 }
     );
   } catch (error) {
     console.log(error);
-    return "Error in updating data !!", 404, false;
+    return NextResponse.json(
+      { success: false, message: "Error in updating project detail!" },
+      { status: 500 }
+    );
   }
 }
 
@@ -57,16 +73,25 @@ export async function DELETE(request, { params }) {
   const { id } = params;
   try {
     await dbConnect();
-    const deletedProjectDetail = await ProjectDetails.findByIdAndDelete(id);
+
+    const deletedProjectDetail = await ProjectDetail.findByIdAndDelete(id);
+
     if (!deletedProjectDetail) {
-      return "Project detail not found!", 404, false;
+      return NextResponse.json(
+        { success: false, message: "Project detail not found!" },
+        { status: 404 } // Change status to 404 to indicate not found
+      );
     }
+
     return NextResponse.json(
       { success: true, data: deletedProjectDetail },
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
-    return "Error in deleting data !!", 404, false;
+    console.error("Error in deleting project detail:", error);
+    return NextResponse.json(
+      { success: false, message: "Error in deleting project detail!" },
+      { status: 500 }
+    );
   }
 }

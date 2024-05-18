@@ -1,5 +1,6 @@
 "use client";
 import ButtonLoading from "@/components/loader/buttonLoading";
+import BuildingLoading from "@/components/loader/pageLoader";
 import { TextareaAutosize } from "@mui/material";
 import axios from "axios";
 import Image from "next/image";
@@ -8,7 +9,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const AdminCreate = () => {
-  const [data, setData] = useState();
+  const [data, setData] = useState({});
   const [client, setClient] = useState("");
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
@@ -24,21 +25,31 @@ const AdminCreate = () => {
   const [loading, setLoading] = useState(false);
   const [dataloading, setDataLoading] = useState(true);
   const params = useParams();
-  console.log("id", params.id, data);
+
   useEffect(() => {
     setDataLoading(true);
     axios
       .get(`/api/projectDetails/${params?.id}`)
       .then((res) => {
-        setData(res.data?.data);
+        const projectData = res.data?.data;
+        setData(projectData);
+        setClient(projectData?.Client || "");
+        setCategory(projectData?.Category || "");
+        setLocation(projectData?.Location || "");
+        setDate(projectData?.Date || "");
+        setLink(projectData?.Link || "");
+        setTitle(projectData?.title || "");
+        setDescription(projectData?.description || "");
+        setImageBase64(projectData?.image || "");
+        setOtherImagesBase64(projectData?.otherImage || []);
         setDataLoading(false);
       })
       .catch((err) => {
         console.log(err);
         setDataLoading(false);
       });
-  }, []);
-  console.log(data);
+  }, [params.id]);
+
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -46,44 +57,42 @@ const AdminCreate = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         let base64String = reader.result;
-        // Remove the data URL prefix
-        base64String = base64String.replace(
-          /^data:image\/(jpeg|jpg);base64,/,
-          ""
-        );
         setImageBase64(base64String);
-        console.log(reader);
       };
       reader.readAsDataURL(file);
     }
   };
+  
 
   const handleOtherImagesChange = (event) => {
     const files = event.target.files;
     if (files) {
       const newImages = Array.from(files);
       setOtherImages([...otherImages, ...newImages]);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setOtherImagesBase64([...otherImagesBase64, reader.result]);
-      };
-      reader.readAsDataURL(newImages[0]);
+
+      newImages.forEach((file) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setOtherImagesBase64((prev) => [...prev, reader.result]);
+        };
+        reader.readAsDataURL(file);
+      });
     }
   };
+
   const handleRemoveOtherImage = (indexToRemove) => {
-    const newOtherImages = [...otherImages];
-    newOtherImages.splice(indexToRemove, 1);
-    setOtherImages(newOtherImages);
-    
-    const newOtherImagesBase64 = [...otherImagesBase64];
-    newOtherImagesBase64.splice(indexToRemove, 1);
-    setOtherImagesBase64(newOtherImagesBase64);
+    setOtherImages((prev) =>
+      prev.filter((_, index) => index !== indexToRemove)
+    );
+    setOtherImagesBase64((prev) =>
+      prev.filter((_, index) => index !== indexToRemove)
+    );
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
     setLoading(true);
+
     const body = {
       Client: client,
       Category: category,
@@ -95,224 +104,215 @@ const AdminCreate = () => {
       image: imageBase64,
       otherImage: otherImagesBase64,
     };
-    console.log(image, imageBase64, otherImages, otherImagesBase64);
+
     axios
-      .post("/api/projectDetails", body)
+      .put(`/api/projectDetails/${params?.id}`, body)
       .then(() => {
-        form
         setLoading(false);
-        setClient("");
-        setCategory("");
-        setLocation("");
-        setDate("");
-        setLink("");
-        setTitle("");
-        setDescription("");
-        setImage(null);
-        setImageBase64("");
-        setOtherImages([]);
-        setOtherImagesBase64([]);
-        toast.success("Project details created successfully");
+        toast.success("Project details updated successfully");
       })
       .catch((error) => {
         console.error(error);
         setLoading(false);
-        toast.error("Error creating project details");
+        toast.error("Error updating project details");
       });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-5xl mx-auto grid grid-cols-2 gap-5">
-      <div className="">
-        <label htmlFor="client" className="block mb-1">
-          Client
-        </label>
-        <input
-          required
-          type="text"
-          defaultValue={data?.Client}
-          id="client"
-          onChange={(e) => setClient(e.target.value)}
-          className="w-full border-gray-300 border p-2 rounded-xl"
-        />
-      </div>
-      <div className="">
-        <label htmlFor="Category" className="block mb-1">
-          Category
-        </label>
-        <input
-          required
-          type="text"
-          defaultValue={category}
-          id="Category"
-          onChange={(e) => setCategory(e.target.value)}
-          className="w-full border-gray-300 border p-2 rounded-xl"
-        />
-      </div>
-      <div className="">
-        <label htmlFor="location" className="block mb-1">
-          location
-        </label>
-        <input
-          required
-          type="text"
-          id="location"
-          defaultValue={location}
-          onChange={(e) => setLocation(e.target.value)}
-          className="w-full border-gray-300 border p-2 rounded-xl"
-        />
-      </div>
-      <div className="">
-        <label htmlFor="Date" className="block mb-1">
-          Date
-        </label>
-        <input
-          required
-          type="text"
-          id="Date"
-          defaultValue={date}
-          onChange={(e) => setDate(e.target.value)}
-          className="w-full border-gray-300 border p-2 rounded-xl"
-        />
-      </div>
-      <div className="">
-        <label htmlFor="Link" className="block mb-1">
-          Link
-        </label>
-        <input
-          required
-          type="text"
-          defaultValue={link}
-          id="Link"
-          onChange={(e) => setLink(e.target.value)}
-          className="w-full border-gray-300 border p-2 rounded-xl"
-        />
-      </div>
-      <div className="">
-        <label htmlFor="title" className="block mb-1">
-          title
-        </label>
-        <input
-          required
-          type="text"
-          defaultValue={title}
-          id="title"
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full border-gray-300 border p-2 rounded-xl"
-        />
-      </div>
-      <div className="">
-        <label htmlFor="description" className="block mb-1">
-          description
-        </label>
-        <TextareaAutosize
-          required
-          type="text"
-          minRows={5}
-          maxRows={5}
-          defaultValue={description}
-          id="description"
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full border-gray-300 border p-2 rounded-xl"
-        />
-      </div>
-      {/* Repeat similar structure for other fields */}
-      {/* Drag and Drop for Single Image */}
-      <div className=" ">
-        <label htmlFor="image" className="block mb-1">
-          Image
-        </label>
-        <input
-          required
-          type="file"
-          id="image"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="hidden"
-        />
-        <div
-          className="h-48 w-full border-dashed border-2 border-gray-300 rounded-lg flex items-center justify-center cursor-pointer"
-          onClick={() => document.getElementById("image").click()}
+    <>
+      {dataloading ? (
+        <BuildingLoading />
+      ) : (
+        <form
+          onSubmit={handleSubmit}
+          className="max-w-5xl mx-auto grid grid-cols-2 gap-5"
         >
-          {image ? (
-            <Image
-              src={URL.createObjectURL(image)}
-              alt="Preview"
-              width={0}
-              height={0}
-
-              className="h-full w-full object-cover"
+          <div>
+            <label htmlFor="client" className="block mb-1">
+              Client
+            </label>
+            <input
+              required
+              type="text"
+              value={client}
+              id="client"
+              onChange={(e) => setClient(e.target.value)}
+              className="w-full border-gray-300 border p-2 rounded-xl"
             />
-          ) : (
-            <span>Drag &amp; Drop Image</span>
-          )}
-        </div>
-        {image && (
-          <button
-            type="button"
-            onClick={() => setImage(null)}
-            className="mt-2 px-4 py-2 bg-red-500 text-white rounded-xl"
-          >
-            Remove Image
-          </button>
-        )}
-      </div>
-      {/* Drag and Drop for Multiple Images */}
-      <div className=" col-span-2">
-        <label htmlFor="otherImages" className="block mb-1">
-          Other Images
-        </label>
-        <input
-          required
-          type="file"
-          id="otherImages"
-          accept="image/*"
-          multiple
-          onChange={handleOtherImagesChange}
-          className="hidden"
-        />
-        <div className="grid grid-cols-4 gap-4">
-          {otherImages.map((image, index) => (
-            <div key={index} className="relative">
-              <Image
-                src={URL.createObjectURL(image)}
-                alt="Preview"
-                className="h-32 w-full object-cover rounded-lg"
-                width={0}
-                height={0}
-              />
+          </div>
+          <div>
+            <label htmlFor="Category" className="block mb-1">
+              Category
+            </label>
+            <input
+              required
+              type="text"
+              value={category}
+              id="Category"
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full border-gray-300 border p-2 rounded-xl"
+            />
+          </div>
+          <div>
+            <label htmlFor="location" className="block mb-1">
+              Location
+            </label>
+            <input
+              required
+              type="text"
+              value={location}
+              id="location"
+              onChange={(e) => setLocation(e.target.value)}
+              className="w-full border-gray-300 border p-2 rounded-xl"
+            />
+          </div>
+          <div>
+            <label htmlFor="Date" className="block mb-1">
+              Date
+            </label>
+            <input
+              required
+              type="text"
+              value={date}
+              id="Date"
+              onChange={(e) => setDate(e.target.value)}
+              className="w-full border-gray-300 border p-2 rounded-xl"
+            />
+          </div>
+          <div>
+            <label htmlFor="Link" className="block mb-1">
+              Link
+            </label>
+            <input
+              required
+              type="text"
+              value={link}
+              id="Link"
+              onChange={(e) => setLink(e.target.value)}
+              className="w-full border-gray-300 border p-2 rounded-xl"
+            />
+          </div>
+          <div>
+            <label htmlFor="title" className="block mb-1">
+              Title
+            </label>
+            <input
+              required
+              type="text"
+              value={title}
+              id="title"
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full border-gray-300 border p-2 rounded-xl"
+            />
+          </div>
+          <div>
+            <label htmlFor="description" className="block mb-1">
+              Description
+            </label>
+            <TextareaAutosize
+              required
+              minRows={5}
+              maxRows={5}
+              value={description}
+              id="description"
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full border-gray-300 border p-2 rounded-xl"
+            />
+          </div>
+          <div>
+            <label htmlFor="image" className="block mb-1">
+              Image
+            </label>
+            <input
+              type="file"
+              id="image"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
+            />
+            <div
+  className="h-48 w-full border-dashed border-2 border-gray-300 rounded-lg flex items-center justify-center cursor-pointer"
+  onClick={() => document.getElementById("image").click()}
+>
+  {imageBase64 ? (
+    <Image
+      src={imageBase64}
+      alt="Preview"
+      width={0}
+      height={0}
+      className="h-full w-full object-cover"
+    />
+  ) : (
+    <span>Drag & Drop Image</span>
+  )}
+</div>
+
+            {imageBase64 && (
               <button
                 type="button"
-                onClick={() => handleRemoveOtherImage(index)}
-                className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1  px-3 focus:outline-none"
+                onClick={() => setImage(null)}
+                className="mt-2 px-4 py-2 bg-red-500 text-white rounded-xl"
               >
-                X
+                Remove Image
               </button>
-            </div>
-          ))}
-          <div
-            className="h-32 w-full border-dashed border-2 border-gray-300 rounded-lg flex items-center justify-center cursor-pointer"
-            onClick={() => document.getElementById("otherImages").click()}
-          >
-            <span>+</span>
+            )}
           </div>
-        </div>
-      </div>
-      <div className="col-span-2 flex justify-center">
-
-     {loading ? <ButtonLoading /> :
-      <button
-        disabled={loading}
-        type="submit"
-        className="px-4 py-2 bg-blue-500 text-white rounded-2xl max-w-sm w-full"
-      >
-        Upload Property
-     
-      </button>
-}
-        </div>
-      {error && <p className="mt-2 text-red-500">{error}</p>}
-    </form>
+          <div className="col-span-2">
+            <label htmlFor="otherImages" className="block mb-1">
+              Other Images
+            </label>
+            <input
+              type="file"
+              id="otherImages"
+              accept="image/*"
+              multiple
+              onChange={handleOtherImagesChange}
+              className="hidden"
+            />
+            <div className="grid grid-cols-4 gap-4">
+              {otherImagesBase64.map((image, index) => (
+                <div key={index} className="relative">
+                  <Image
+                    src={image}
+                    alt="Preview"
+                    className="h-32 w-full object-cover rounded-lg"
+                    width={0}
+                    height={0}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveOtherImage(index)}
+                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1  px-3 focus:outline-none"
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+              <div
+                className="h-32 w-full border-dashed border-2 border-gray-300 rounded-lg flex items-center justify-center cursor-pointer"
+                onClick={() => document.getElementById("otherImages").click()}
+              >
+                <span>+</span>
+              </div>
+            </div>
+          </div>
+          <div className="col-span-2 flex justify-center">
+            {loading ? (
+              <ButtonLoading />
+            ) : (
+              <button
+                disabled={loading}
+                type="submit"
+                className="px-4 py-2 bg-blue-500 text-white rounded-2xl max-w-sm w-full"
+              >
+                Update Project
+              </button>
+            )}
+          </div>
+          {error && <p className="mt-2 text-red-500">{error}</p>}
+        </form>
+      )}
+    </>
   );
 };
 
