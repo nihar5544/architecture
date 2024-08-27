@@ -10,7 +10,7 @@ export const dbConnect = async () => {
   }
 
   try {
-    const { connection } = await mongoose.connect('mongodb+srv://nihar:nihar123@cluster0.ike2xqy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
+    const { connection } = await mongoose.connect(process.env.MONGO_DB_URL);
 
     console.log("db connected...");
     console.log(connection.readyState);

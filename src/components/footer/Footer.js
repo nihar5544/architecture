@@ -1,6 +1,7 @@
 import React from "react";
 import { DM_Serif_Display } from "next/font/google";
 import Image from "next/image";
+import Link from "next/link";
 const jost = DM_Serif_Display({ weight: "400", subsets: ["latin"] });
 function Footer() {
   return (
@@ -10,7 +11,8 @@ function Footer() {
           {" "}
           <Image
             // eslint-disable-next-line no-undef
-            src={`/images/Logo.png`}
+            src={`/images/Logo.webp`}
+              fetchPriority="high"
             width={150}
             height={60}
             alt="coindelta-logo"
@@ -25,10 +27,10 @@ function Footer() {
           >
             Pages
           </span>
-          <span className="my-4">Home</span>
-          <span className="my-4">Services</span>
-          <span className="my-4">Project</span>
-          <span className="my-4">Contact</span>
+          <Link href="/" className="my-4">Home</Link>
+          <Link href="/services" className="my-4">Services</Link>
+          <Link href="/projects" className="my-4">Project</Link>
+          <Link href="/contact" className="my-4">Contact</Link>
         </div>
         <div className="flex flex-col ">
           {" "}
@@ -54,7 +56,7 @@ function Footer() {
             Pragatinagar, Naranpura,
             <br /> Ahmedabad - 380013{" "}
           </span>
-          <span className="my-4">(123), 456- 789</span>
+          <span className="my-4">+91 98257 39499</span>
         </div>
       </div>
     </footer>

@@ -7,9 +7,8 @@ import React, { useEffect, useState } from "react";
 
 function Project() {
   const [data, setData] = useState();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(data ? false : true);
   useEffect(() => {
-    setLoading(true);
     axios
       .get("/api/projectDetails")
       .then((res) => {

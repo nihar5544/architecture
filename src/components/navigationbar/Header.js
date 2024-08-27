@@ -15,7 +15,8 @@ function Header() {
           <Link href="/" className="flex items-center">
             <Image
               // eslint-disable-next-line no-undef
-              src={`/images/Logo.png`}
+              src={`/images/Logo.webp`}
+              fetchPriority="high"
               width={150}
               height={60}
               alt="mcad-logo"

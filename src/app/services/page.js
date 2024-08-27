@@ -11,23 +11,23 @@ function page() {
     <div className="w-full flex flex-col justify-center items-center one fadeIn animate">
       <PageHeader name={"Services"} />
       <div className="lg:w-[70%] flex flex-col">
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 my-40 max-sm:p-5">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 my-40 max-sm:my-20 max-sm:p-5">
           <ReadmoreCard
             title={"Project Plan"}
             contant={
-              "  There are many variations of the passages of lorem Ipsum from available, majority"
+              "Every project is unique, and so is our approach. While there are numerous methods to plan and execute, our process is tailored to ensure precision and success at every stage. From concept to completion, we focus on delivering exceptional results that align with your vision."
             }
           />
           <ReadmoreCard
             title={"Interior Work"}
             contant={
-              "  There are many variations of the passages of lorem Ipsum from available, majority"
+              "Interior design is more than just aesthetics—it's about creating spaces that truly reflect your personality and needs. We offer various approaches, each one focused on blending beauty with functionality to craft interiors that are as practical as they are stunning."
             }
           />
           <ReadmoreCard
             title={"Retail Design"}
             contant={
-              "  There are many variations of the passages of lorem Ipsum from available, majority"
+              "Retail spaces require a special touch to attract and engage customers. Our design strategies incorporate creativity and customer behavior insights to craft spaces that enhance the shopping experience. We explore a wide range of design possibilities, ensuring that your retail environment stands out and thrives."
             }
           />
         </div>
@@ -43,7 +43,7 @@ function page() {
             <div className="grid grid-cols-1 lg:grid-cols-2 mb-20">
               <Image
                 // eslint-disable-next-line no-undef
-                src={`/images/Service1.png`}
+                src={`/images/Service1.webp`}
                 width={400}
                 height={400}
                 alt="coindelta-logo"
@@ -68,9 +68,9 @@ function page() {
                     Concept & Details
                   </span>
                   <span>
-                    It is a long established fact will be distracted. Lorem
-                    Ipsum is simply dummy from text of the and typesetting
-                    indufstry.{" "}
+                    We start by understanding your vision, meticulously crafting
+                    the concept and refining every detail to ensure a strong
+                    foundation for your project.
                   </span>
                 </div>
               </div>
@@ -92,19 +92,19 @@ function page() {
                     className="text-4xl mb-2 text-back"
                     style={{ fontFamily: `${jost.style.fontFamily}` }}
                   >
-                    Idea for Work
+                    Strategic Planning
                   </span>
                   <span>
-                    It is a long established fact will be distracted. Lorem
-                    Ipsum is simply dummy from text of the and typesetting
-                    indufstry.{" "}
+                    Our team develops a comprehensive plan, blending innovative
+                    ideas with practical solutions to bring your project to life
+                    with precision and creativity.
                   </span>
                 </div>
               </div>
               <div className="flex justify-end">
                 <Image
                   // eslint-disable-next-line no-undef
-                  src={`/images/Service2.png`}
+                  src={`/images/Service2.webp`}
                   width={400}
                   height={400}
                   alt="coindelta-logo"
@@ -115,7 +115,7 @@ function page() {
             <div className="grid grid-cols-1 lg:grid-cols-2 mb-20">
               <Image
                 // eslint-disable-next-line no-undef
-                src={`/images/Service3.png`}
+                src={`/images/Service3.webp`}
                 width={400}
                 height={400}
                 alt="coindelta-logo"
@@ -137,12 +137,12 @@ function page() {
                     className="text-4xl mb-2 text-back"
                     style={{ fontFamily: `${jost.style.fontFamily}` }}
                   >
-                    Design
+                    Design Excellence
                   </span>
                   <span>
-                    It is a long established fact will be distracted. Lorem
-                    Ipsum is simply dummy from text of the and typesetting
-                    indufstry.{" "}
+                    We transform concepts into captivating designs, balancing
+                    aesthetics with functionality to create spaces that inspire
+                    and endure.
                   </span>
                 </div>
               </div>
@@ -163,11 +163,13 @@ function page() {
                   <span
                     className="text-4xl mb-2 text-back"
                     style={{ fontFamily: `${jost.style.fontFamily}` }}
-                  >Perfection</span>
+                  >
+                    Perfect Execution
+                  </span>
                   <span>
-                    It is a long established fact will be distracted. Lorem
-                    Ipsum is simply dummy from text of the and typesetting
-                    indufstry.{" "}
+                    Every project is executed with utmost care, ensuring
+                    flawless results that exceed expectations and bring your
+                    vision to reality.
                   </span>
                 </div>
               </div>
@@ -175,7 +177,7 @@ function page() {
                 {" "}
                 <Image
                   // eslint-disable-next-line no-undef
-                  src={`/images/Service4.png`}
+                  src={`/images/Service4.webp`}
                   width={400}
                   height={400}
                   alt="coindelta-logo"
@@ -186,8 +188,8 @@ function page() {
           </div>
         </div>
         <div className="my-40">
-        <ContactUs />
-      </div>
+          <ContactUs />
+        </div>
       </div>
     </div>
   );
