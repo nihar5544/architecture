@@ -25,7 +25,7 @@ function ContactUs() {
         <ButtonLight
           name={"Contact With Us"}
           handlesubmit={() => {
-            router.push("/contact-us");
+            router.push("/contact");
           }}
         />
       </div>

@@ -4,7 +4,7 @@ import BuildingLoading from "@/components/loader/pageLoader";
 import { TextareaAutosize } from "@mui/material";
 import axios from "axios";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -25,6 +25,7 @@ const AdminCreate = () => {
   const [loading, setLoading] = useState(false);
   const [dataloading, setDataLoading] = useState(true);
   const params = useParams();
+  const router = useRouter();
 
   useEffect(() => {
     setDataLoading(true);
@@ -296,7 +297,14 @@ const AdminCreate = () => {
               </div>
             </div>
           </div>
-          <div className="col-span-2 flex justify-center">
+          <div className="col-span-2 flex justify-center gap-2 max-sm:flex-col-reverse">
+          <button
+          onClick={() => router.push("/admin/projects")}
+          type="button"
+          className="px-4 py-2 bg-gray-500 text-white rounded-2xl max-w-sm w-full"
+        >
+          Back
+        </button>
             {loading ? (
               <ButtonLoading />
             ) : (

@@ -3,6 +3,7 @@ import ButtonLoading from "@/components/loader/buttonLoading";
 import { TextareaAutosize } from "@mui/material";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -20,6 +21,7 @@ const AdminCreate = () => {
   const [otherImagesBase64, setOtherImagesBase64] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -55,7 +57,7 @@ const AdminCreate = () => {
     const newOtherImages = [...otherImages];
     newOtherImages.splice(indexToRemove, 1);
     setOtherImages(newOtherImages);
-    
+
     const newOtherImagesBase64 = [...otherImagesBase64];
     newOtherImagesBase64.splice(indexToRemove, 1);
     setOtherImagesBase64(newOtherImagesBase64);
@@ -102,7 +104,10 @@ const AdminCreate = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-5xl mx-auto grid grid-cols-2 gap-5">
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-5xl mx-auto grid grid-cols-2 gap-5"
+    >
       <div className="">
         <label htmlFor="client" className="block mb-1">
           Client
@@ -220,7 +225,6 @@ const AdminCreate = () => {
               alt="Preview"
               width={0}
               height={0}
-
               className="h-full w-full object-cover"
             />
           ) : (
@@ -278,19 +282,26 @@ const AdminCreate = () => {
           </div>
         </div>
       </div>
-      <div className="col-span-2 flex justify-center">
-
-     {loading ? <ButtonLoading /> :
-      <button
-        disabled={loading}
-        type="submit"
-        className="px-4 py-2 bg-blue-500 text-white rounded-2xl max-w-sm w-full"
-      >
-        Upload Property
-     
-      </button>
-}
-        </div>
+      <div className="col-span-2 flex justify-center gap-2 max-sm:flex-col-reverse">
+        <button
+          onClick={() => router.push("/admin")}
+          type="button"
+          className="px-4 py-2 bg-gray-500 text-white rounded-2xl max-w-sm w-full"
+        >
+          Back
+        </button>
+        {loading ? (
+          <ButtonLoading />
+        ) : (
+          <button
+            disabled={loading}
+            type="submit"
+            className="px-4 py-2 bg-blue-500 text-white rounded-2xl max-w-sm w-full"
+          >
+            Upload Property
+          </button>
+        )}
+      </div>
       {error && <p className="mt-2 text-red-500">{error}</p>}
     </form>
   );

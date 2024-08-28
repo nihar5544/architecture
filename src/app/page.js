@@ -94,7 +94,7 @@ export default function Home() {
               <ButtonDark
                 name={"Get Free Estimate"}
                 handlesubmit={() => {
-                  router.push("/contact-us");
+                  router.push("/contact");
                 }}
               />
             </div>
