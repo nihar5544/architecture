@@ -3,6 +3,8 @@ import "./globals.css";
 import Header from "@/components/navigationbar/Header";
 import Footer from "@/components/footer/Footer";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const jost = Jost({ subsets: ["latin"] });
 
@@ -30,7 +32,8 @@ export default function RootLayout({ children }) {
         <Header />
         {children}
         <Toaster richColors />
-
+        <Analytics />
+        <SpeedInsights />
         <Footer />
       </body>
     </html>
