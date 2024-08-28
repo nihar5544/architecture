@@ -8,7 +8,7 @@ const jost = DM_Serif_Display({ weight: "400", subsets: ["latin"] });
 function PropertyCard({ key, data }) {
   return (
     <div key={key} className="w-full flex justify-center ">
-      <div className="card cursor-pointer">
+      <div className="card cursor-pointer grayscale hover:grayscale-0">
         <a href={`/project-details/${data?._id}`}>
           <div className="overflow-hidden">
             <Image

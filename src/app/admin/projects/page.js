@@ -1,18 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import axios from "axios";
 import { Button } from "@mui/material";
 import Image from "next/image";
 import BuildingLoading from "@/components/loader/pageLoader";
 import { toast } from "sonner";
-import Link from "next/link";
 
 function Projects() {
   const [data, setData] = useState();
@@ -66,7 +58,7 @@ function Projects() {
                 
               <div
                 key={row.name}
-                className="w-full flex justify-between items-center p-2 shadow-lg rounded-2xl gap-6 hover:bg-gradient-to-l hover:from-cyan-200/30"
+                className="w-full flex justify-between items-center p-2 drop-shadow-xl bg-white rounded-2xl gap-6 hover:bg-gradient-to-l hover:from-cyan-200/30"
               >
                 <Image
                   src={row?.image}

@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import { TextField, Button } from "@mui/material";
 import { DM_Serif_Display } from "next/font/google";
 import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import ButtonLoading from "@/components/loader/buttonLoading";
+import Icons from "@/components/icons";
 
 const jost = DM_Serif_Display({ weight: "400", subsets: ["latin"] });
 
@@ -12,6 +13,7 @@ function Page() {
   // State hooks for email and password
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loader, setLoader] = useState(false);
   const router = useRouter();
   // Handle form submission
@@ -40,45 +42,66 @@ function Page() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh]">
       <div className="w-full max-w-md p-8 space-y-12 bg-white drop-shadow-xl rounded-lg">
-        <h2
-          className="text-3xl font-bold text-center"
-          style={{ fontFamily: `${jost.style.fontFamily}` }}
-        >
+        <h2 className="text-3xl font-bold text-center font-sans">
           Admin Login
         </h2>
         <form onSubmit={handleSubmit} className="mt-8 space-y-10">
           <div className="rounded-md shadow-sm">
-            <TextField
-              id="email"
-              placeholder="Enter Email"
-              variant="outlined"
-              fullWidth
-              required
-              className="mb-6"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)} // Update state on change
-            />
-            <TextField
-              id="password"
-              type="password"
-              placeholder="Enter Password"
-              variant="outlined"
-              fullWidth
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)} // Update state on change
-            />
+            <div className="">
+              <label htmlFor="email" className="block mb-1">
+                Email
+              </label>
+              <input
+                id="email"
+                placeholder="Enter Email"
+                variant="outlined"
+                fullWidth
+                required
+                className="w-full border-gray-300 border p-2 rounded-xl mb-6"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)} // Update state on change
+              />
+            </div>
+            <div className="">
+              <label htmlFor="password" className="block mb-1">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter Password"
+                  required
+                  className="w-full border-gray-300 border p-2 rounded-xl"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-4 text-gray-500"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <Icons name={"show-password"} />
+                  ) : (
+                    <Icons name={"show-password"} />
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center justify-between">
-            <Button
+            <button
+              disabled={loader}
               type="submit"
-              className="w-full py-3"
-              variant="outlined"
-              color="primary"
-            >
-              Sign In
-            </Button>
-          </div>
+              className="px-4 py-2 bg-blue-500 text-white rounded-2xl max-w-sm w-full"
+              >
+              {loader ? (
+                <ButtonLoading />
+              ) : (
+                "Login"
+              )}
+            </button>
         </form>
       </div>
     </div>
