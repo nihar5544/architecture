@@ -4,9 +4,6 @@ export function middleware(request) {
   const { pathname } = request.nextUrl;
   const authToken = request.cookies.get("authToken")?.value;
 
-  console.log("Auth Token:", authToken);
-  console.log("Requested Path:", pathname);
-
   const isAuthRoute = ["/login"].includes(pathname);
   const isProtectedRoute = ["/admin/create", "/admin"].some((route) =>
     pathname.startsWith(route)

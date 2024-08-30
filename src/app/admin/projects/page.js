@@ -55,7 +55,6 @@ function Projects() {
           {data &&
             data.length > 0 &&
             data.map((row) => (
-                
               <div
                 key={row.name}
                 className="w-full flex justify-between items-center p-2 drop-shadow-xl bg-white rounded-2xl gap-6 hover:bg-gradient-to-l hover:from-cyan-200/30"
@@ -74,8 +73,8 @@ function Projects() {
                       variant="outlined"
                       color="success"
                       //   onClick={() => handleDelete(row?._id)}
-                      
-                href={`/admin/projects/${row?._id}`}
+
+                      href={`/admin/projects/${row?._id}`}
                       sx={{ mr: 1 }}
                     >
                       Edit
