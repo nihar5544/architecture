@@ -1,16 +1,20 @@
+"use client";
 import React from "react";
 import { DM_Serif_Display } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 const jost = DM_Serif_Display({ weight: "400", subsets: ["latin"] });
 function Footer() {
+  const pathname = usePathname();
+  if (pathname.startsWith("/admin") || pathname === "/login") return null;
   return (
     <footer className="border-b-2 flex justify-center container-padding-x xl:py-[60px] lg:py-[60px] py-[60px] mt-[0px] z-[2] relative">
       <div className="flex lg:flex-row flex-col justify-between  w-[70%]">
         <div>
           {" "}
           <Image
-            // eslint-disable-next-line no-undef
+             
             src={`/images/Logo.webp`}
               fetchPriority="high"
             width={150}

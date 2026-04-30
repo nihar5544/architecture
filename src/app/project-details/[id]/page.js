@@ -14,7 +14,6 @@ function ProjectDetails() {
   const params = useParams();
   console.log("id", params.id, data);
   useEffect(() => {
-    setLoading(true);
     axios
       .get(`/api/projectDetails/${params?.id}`)
       .then((res) => {

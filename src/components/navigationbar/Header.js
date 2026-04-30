@@ -7,13 +7,14 @@ import React, { useState } from "react";
 function Header() {
   const pathname = usePathname();
   const [hideLogo, setHideLogo] = useState(false);
+  if (pathname.startsWith("/admin") || pathname === "/login") return null;
   return (
     <div className="flex items-center justify-center sticky top-0 z-40 backdrop-blur-md border-b-2">
       <div className="container-padding-x lg:block w-[60%] hidden">
         <div className="flex justify-between font-medium text-[18px]">
           <Link href="/" className="flex items-center">
             <Image
-              // eslint-disable-next-line no-undef
+               
               src={`/images/Logo.webp`}
               fetchPriority="high"
               width={150}

@@ -44,8 +44,10 @@ export async function POST(request) {
     });
 
     response.cookies.set("authToken", token, {
-      expiresIn: "1d",
+      maxAge: 60 * 60 * 24,
       httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
     });
 
     console.log(user);
