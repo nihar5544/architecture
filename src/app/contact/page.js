@@ -1,6 +1,6 @@
 "use client";
 import PageHeader from "@/components/navigationbar/PageHeader";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DM_Serif_Display } from "next/font/google";
 import Icons from "@/components/icons";
 import { TextField } from "@mui/material";
@@ -10,33 +10,39 @@ import { toast } from "sonner";
 
 const jost = DM_Serif_Display({ weight: "400", subsets: ["latin"] });
 
+const DEFAULT_CMS = {
+  title: "We love meeting new people\nand helping them.",
+  email: "info@yourdomain.com",
+  phone: "+91 98257 39499",
+  website: "www.yourdomain.com",
+};
+
 function Page() {
-  // State variables for form fields
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [phone, setPhone] = useState("");
-  const [description, setDescription] = useState(
-    "Hello, I am interested in..."
-  );
+  const [description, setDescription] = useState("Hello, I am interested in...");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [cms, setCms] = useState(DEFAULT_CMS);
 
-  const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  };
+  useEffect(() => {
+    axios
+      .get("/api/cms/contact")
+      .then((res) => {
+        if (res.data?.data) setCms({ ...DEFAULT_CMS, ...res.data.data });
+      })
+      .catch(() => {});
+  }, []);
 
-  // handleSubmit function with validation
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
   const handleSubmit = () => {
     const newErrors = {};
-
     if (!name) newErrors.name = "Name is required";
-    if (!email) {
-      newErrors.email = "Email is required";
-    } else if (!validateEmail(email)) {
-      newErrors.email = "Invalid email format";
-    }
+    if (!email) newErrors.email = "Email is required";
+    else if (!validateEmail(email)) newErrors.email = "Invalid email format";
     if (!subject) newErrors.subject = "Subject is required";
     if (!phone) newErrors.phone = "Phone number is required";
     if (!description) newErrors.description = "Description is required";
@@ -46,13 +52,11 @@ function Page() {
       return;
     }
     setErrors({});
-
-    const formData = { name, email, subject, phone, description };
+    setLoading(true);
 
     axios
-      .post("/api/contect", formData)
-      .then((response) => {
-        console.log(response.data);
+      .post("/api/contect", { name, email, subject, phone, description })
+      .then(() => {
         toast.success("Message sent successfully");
         setName("");
         setEmail("");
@@ -60,11 +64,11 @@ function Page() {
         setPhone("");
         setDescription("");
       })
-      .catch((error) => {
-        console.error(error);
-        toast.error("Error sending message");
-      });
+      .catch(() => toast.error("Error sending message"))
+      .finally(() => setLoading(false));
   };
+
+  const titleLines = (cms.title || DEFAULT_CMS.title).split("\n");
 
   return (
     <div className="flex flex-col items-center justify-center one fadeIn animate">
@@ -74,21 +78,26 @@ function Page() {
           className="text-5xl mb-2 mt-24 text-center"
           style={{ fontFamily: `${jost.style.fontFamily}` }}
         >
-          We love meeting new people <br /> and helping them.
+          {titleLines.map((line, i) => (
+            <React.Fragment key={i}>
+              {line}
+              {i < titleLines.length - 1 && <br />}
+            </React.Fragment>
+          ))}
         </span>
         <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-x-10 my-20 max-sm:p-3">
           <div className="bg-[#F4F0EC] w-full rounded-3xl flex flex-col justify-between items-center p-6">
             <div className="flex justify-between w-full items-center">
               <Icons name={"C-mail"} />
-              <span>info@yourdomain.com</span>
+              <span>{cms.email}</span>
             </div>
             <div className="flex justify-between w-full items-center">
               <Icons name={"C-phone"} />
-              <span>+91 98257 39499</span>
+              <span>{cms.phone}</span>
             </div>
             <div className="flex justify-between w-full items-center">
               <Icons name={"C-web"} />
-              <span>www.yourdomain.com</span>
+              <span>{cms.website}</span>
             </div>
           </div>
           <div className="col-span-2 max-sm:col-span-1">
