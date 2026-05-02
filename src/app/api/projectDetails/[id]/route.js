@@ -3,7 +3,7 @@ import ProjectDetail from "../../../../../models/ProjectDetails";
 import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
-  const { id } = params;
+  const { id } = await params;
   try {
     await dbConnect();
 
@@ -37,31 +37,30 @@ export async function GET(request, { params }) {
 
 export async function PUT(request, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     await dbConnect();
 
-    const { title, description, image, otherImage } = await request.json();
+    const { Client, Category, Location, Date, Link, title, description, image, otherImage } =
+      await request.json();
 
-    let projectDetail = await ProjectDetail.findById(id);
-    if (!projectDetail) {
+    const updatedProjectDetail = await ProjectDetail.findByIdAndUpdate(
+      id,
+      { Client, Category, Location, Date, Link, title, description, image, otherImage },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedProjectDetail) {
       return NextResponse.json(
         { success: false, message: "Project detail not found!" },
         { status: 404 }
       );
     }
 
-    projectDetail.title = title;
-    projectDetail.description = description;
-    projectDetail.image = image;
-    projectDetail.otherImage = otherImage;
-
-    const updatedProjectDetail = await projectDetail.save();
     return NextResponse.json(
       { success: true, data: updatedProjectDetail },
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
     return NextResponse.json(
       { success: false, message: "Error in updating project detail!" },
       { status: 500 }
@@ -70,7 +69,7 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const { id } = params;
+  const { id } = await params;
   try {
     await dbConnect();
 

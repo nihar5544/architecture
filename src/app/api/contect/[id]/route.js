@@ -4,7 +4,7 @@ import ContactForm from "../../../../../models/ContactForm";
 import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
-  const { id } = params;
+  const { id } = await params;
   try {
     await dbConnect();
 
@@ -38,7 +38,7 @@ export async function GET(request, { params }) {
 
 export async function PUT(request, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     await dbConnect();
 
     const { title, description, image, otherImage } = await request.json();
@@ -71,7 +71,7 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const { id } = params;
+  const { id } = await params;
   try {
     await dbConnect();
 

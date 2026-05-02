@@ -55,7 +55,7 @@ export default function SwipeableTemporaryDrawer({ setHideLogo, hideLogo }) {
       <div className="flex justify-between p-4 header">
         <Link href="/">
           <Image
-            // eslint-disable-next-line no-undef
+             
             src={`/images/Logo.webp`}
             fetchPriority="high"
             width={150}
@@ -147,7 +147,7 @@ export default function SwipeableTemporaryDrawer({ setHideLogo, hideLogo }) {
             {!hideLogo && (
               <Link href="/">
                 <Image
-                  // eslint-disable-next-line no-undef
+                   
                   src={`/images/Logo.webp`}
                   fetchPriority="high"
                   width={150}
