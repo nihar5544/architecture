@@ -1,232 +1,313 @@
-@import url("https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:wght@400&display=swap");
+/* ── Satoshi from Fontshare ── */
+@import url("https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ── Design tokens (dark-first) ── */
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --color-bg:             #0a0a09;
+  --color-surface:        #111110;
+  --color-surface-2:      #1a1918;
+  --color-surface-offset: #222120;
+  --color-border:         rgba(255, 255, 255, 0.08);
+  --color-divider:        rgba(255, 255, 255, 0.05);
+  --color-text:           #f0ede8;
+  --color-text-muted:     #8a8680;
+  --color-text-faint:     #4a4845;
+  --color-primary:        #c8a96e;
+  --color-primary-hover:  #e2c28a;
+  --color-primary-active: #a8894e;
+  --color-accent-2:       #4a7c7e;
+  --color-navbar-bg:      rgba(10, 10, 9, 0.85);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+/* ── Light mode ── */
+.light {
+  --color-bg:             #f5f3ef;
+  --color-surface:        #faf9f6;
+  --color-surface-2:      #ffffff;
+  --color-surface-offset: #ede9e3;
+  --color-border:         rgba(0, 0, 0, 0.08);
+  --color-divider:        rgba(0, 0, 0, 0.05);
+  --color-text:           #1a1814;
+  --color-text-muted:     #6b6762;
+  --color-text-faint:     #b0aca8;
+  --color-primary:        #8b6435;
+  --color-primary-hover:  #a07840;
+  --color-primary-active: #6d4f28;
+  --color-navbar-bg:      rgba(245, 243, 239, 0.85);
+}
+
+/* ── Base ── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: auto; /* Lenis handles smooth scroll */
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: "Satoshi", "Inter", sans-serif;
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    cursor: none; /* Custom cursor on desktop */
+  }
+
+  /* Restore default cursor on touch devices */
+  @media (pointer: coarse) {
+    body { cursor: auto; }
+  }
+
+  /* Admin pages keep default cursor */
+  body.admin-page { cursor: auto; }
+  body.admin-page button { cursor: pointer; }
+  body.admin-page a { cursor: pointer; }
+  body.admin-page * { cursor: auto; }
+  body.admin-page button,
+  body.admin-page a,
+  body.admin-page [role="button"],
+  body.admin-page input,
+  body.admin-page select,
+  body.admin-page textarea { cursor: pointer; }
+  body.admin-page input,
+  body.admin-page textarea { cursor: text; }
+
+  h1, h2, h3, h4 {
+    line-height: 1.1;
+    font-weight: 400;
+  }
+
+  img, video { max-width: 100%; display: block; }
+
+  a { color: inherit; text-decoration: none; }
+
+  button { cursor: none; }
+  @media (pointer: coarse) { button { cursor: pointer; } }
+}
+
+/* ── Typography scale ── */
+@layer utilities {
+  .text-hero {
+    font-size: clamp(4rem, 2rem + 6vw, 9rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+  }
+  .text-display {
+    font-size: clamp(2.5rem, 1rem + 4vw, 6rem);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+  }
+  .text-h2 {
+    font-size: clamp(2rem, 1rem + 2.5vw, 4rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .text-h3 {
+    font-size: clamp(1.25rem, 0.8rem + 1vw, 2rem);
+    line-height: 1.2;
+  }
+  .text-micro {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .font-cormorant {
+    font-family: var(--font-cormorant), Georgia, serif;
+  }
+  .font-mono-custom {
+    font-family: var(--font-mono), monospace;
+  }
+  .section-padding {
+    padding-top: clamp(5rem, 8vw, 10rem);
+    padding-bottom: clamp(5rem, 8vw, 10rem);
+  }
+  .site-container {
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 5%;
+    padding-right: 5%;
   }
 }
 
-.font-jost {
-  font-family: "Jost", sans-serif;
+/* ── Grain texture overlay ── */
+.grain-overlay::before {
+  content: "";
+  position: fixed;
+  inset: -200%;
+  width: 400%;
+  height: 400%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9998;
+  animation: grain 8s steps(1) infinite;
 }
 
-.font-serif {
-  font-family: "serif", serif;
+@keyframes grain {
+  0%, 100% { transform: translate(0%, 0%); }
+  10%       { transform: translate(-5%, -10%); }
+  20%       { transform: translate(-15%, 5%); }
+  30%       { transform: translate(7%, -25%); }
+  40%       { transform: translate(-5%, 25%); }
+  50%       { transform: translate(-15%, 10%); }
+  60%       { transform: translate(15%, 0%); }
+  70%       { transform: translate(0%, 15%); }
+  80%       { transform: translate(3%, 35%); }
+  90%       { transform: translate(-10%, 10%); }
 }
 
-body {
-  /* color: rgb(var(--foreground-rgb)); */
-  background-color: white;
-  color: black;
-  /* background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb)); */
-  font-size: 22px;
-  background-image: url("/images/Line.svg");
-  background-position: center;
+/* ── Scroll-reveal base state ── */
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(40px);
+}
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.vacancy-image {
-  background-image: url("/images/Dashboard1.webp");
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  /* border-bottom-left-radius: 300px; */
+/* ── Gold text gradient ── */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #c8a96e 0%, #e2c28a 50%, #c8a96e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/*=== Trigger  ===*/
-.animate {
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-}
-.one {
-  -webkit-animation-delay: 0.5s;
-  -moz-animation-delay: 0.5s;
-  animation-delay: 0.5s;
+/* ── Horizontal scroll section ── */
+.h-scroll-container {
+  overflow: hidden;
 }
 
-.two {
-  -webkit-animation-delay: 1s;
-  -moz-animation-delay: 1s;
-  animation-delay: 1s;
+/* ── Project card hover ── */
+.project-card-img {
+  transform: scale(1.05);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.three {
-  -webkit-animation-delay: 1.5s;
-  -moz-animation-delay: 1.5s;
-  animation-delay: 1.5s;
+.project-card:hover .project-card-img {
+  transform: scale(1.0);
+}
+.project-card:hover .project-card-overlay {
+  opacity: 1 !important;
 }
 
-/*=== Animations start here  ===*/
+/* ── Form float label ── */
+.float-label {
+  position: relative;
+}
+.float-label input,
+.float-label textarea,
+.float-label select {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  width: 100%;
+  padding: 1.25rem 0 0.5rem;
+  outline: none;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+.float-label input:focus,
+.float-label textarea:focus,
+.float-label select:focus {
+  border-color: var(--color-primary);
+}
+.float-label label {
+  position: absolute;
+  top: 1.25rem;
+  left: 0;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.float-label input:focus + label,
+.float-label input:not(:placeholder-shown) + label,
+.float-label textarea:focus + label,
+.float-label textarea:not(:placeholder-shown) + label,
+.float-label select:focus + label,
+.float-label select:not([value=""]) + label {
+  top: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
 
-/*==== FADE IN UP ===*/
-@-webkit-keyframes fadeInUp {
-  from {
-    opacity: 0;
-    -webkit-transform: translate3d(0, 100%, 0);
-    transform: translate3d(0, 100%, 0);
+/* ── Gallery image hover ── */
+.gallery-img:hover {
+  transform: scale(1.03);
+}
+
+/* ── Spinner keyframe ── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Pulse skeleton ── */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── Service card line on hover ── */
+.service-cell:hover .service-card-line {
+  width: 100% !important;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-text-faint);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+
+/* ── Admin pages — reset to light defaults ── */
+.admin-page {
+  background-color: #f9fafb;
+  color: #111827;
+  font-family: "Inter", "Satoshi", sans-serif;
+  cursor: auto;
+}
+.admin-page * {
+  cursor: auto;
+}
+.admin-page a,
+.admin-page button,
+.admin-page [role="button"],
+.admin-page input[type="submit"],
+.admin-page select,
+.admin-page label[for] {
+  cursor: pointer;
+}
+.admin-page input,
+.admin-page textarea {
+  cursor: text;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-
-  to {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none;
-  }
+  .grain-overlay::before { animation: none; }
 }
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    -webkit-transform: translate3d(0, 100%, 0);
-    transform: translate3d(0, 100%, 0);
-  }
-
-  to {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none;
-  }
-}
-
-.fadeInUp {
-  -webkit-animation-name: fadeInUp;
-  animation-name: fadeInUp;
-}
-
-/*=== FADE IN DOWN ===*/
-.fadeInDown {
-  -webkit-animation-name: fadeInDown;
-  animation-name: fadeInDown;
-}
-@-webkit-keyframes fadeInDown {
-  0% {
-    opacity: 0;
-    -webkit-transform: translate3d(0, -100%, 0);
-    transform: translate3d(0, -100%, 0);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none;
-  }
-}
-@keyframes fadeInDown {
-  0% {
-    opacity: 0;
-    -webkit-transform: translate3d(0, -100%, 0);
-    transform: translate3d(0, -100%, 0);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none;
-  }
-}
-
-/*=== FADE IN LEFT ===*/
-@-webkit-keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    -webkit-transform: translate3d(-100%, 0, 0);
-    transform: translate3d(-100%, 0, 0);
-  }
-
-  to {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none;
-  }
-}
-@keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    -webkit-transform: translate3d(-100%, 0, 0);
-    transform: translate3d(-100%, 0, 0);
-  }
-
-  to {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none;
-  }
-}
-
-.fadeInLeft {
-  -webkit-animation-name: fadeInLeft;
-  animation-name: fadeInLeft;
-}
-
-/*==== FADE IN RIGHT ===*/
-@-webkit-keyframes fadeInRight {
-  from {
-    opacity: 0;
-    -webkit-transform: translate3d(100%, 0, 0);
-    transform: translate3d(100%, 0, 0);
-  }
-
-  to {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none;
-  }
-}
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    -webkit-transform: translate3d(100%, 0, 0);
-    transform: translate3d(100%, 0, 0);
-  }
-
-  to {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none;
-  }
-}
-
-.fadeInRight {
-  -webkit-animation-name: fadeInRight;
-  animation-name: fadeInRight;
-}
-
-/*=== FADE IN  ===*/
-@-webkit-keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-.fadeIn {
-  -webkit-animation-name: fadeIn;
-  animation-name: fadeIn;
-}
-
-
-

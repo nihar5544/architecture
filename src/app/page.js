@@ -1,289 +1,531 @@
 "use client";
-import Header from "@/components/navigationbar/Header";
-import Image from "next/image";
-import { DM_Serif_Display } from "next/font/google";
-import ButtonDark from "@/components/button/ButtonDark";
-import ReadmoreCard from "@/components/cards/ReadmoreCard";
-import Icons from "@/components/icons";
-import ContactUs from "@/components/cards/ContactUs";
-import { useEffect, useState } from "react";
-import ScrollAnimation from "@/components/ui/Animation";
-import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import Link from "next/link";
 import axios from "axios";
+import MarqueeTicker from "@/components/ui/MarqueeTicker";
+import StatsCounter from "@/components/ui/StatsCounter";
+import CTABanner from "@/components/ui/CTABanner";
+import ProjectCard from "@/components/ui/ProjectCard";
 
-const jost = DM_Serif_Display({ weight: "400", subsets: ["latin"] });
+const ServiceScene = dynamic(() => import("@/components/three/ServiceScene"), {
+  ssr: false,
+  loading: () => null,
+});
 
-const DEFAULT = {
-  hero: {
-    title: "Let Your Home\nBe Unique",
-    subtitle:
-      "Your home should be as unique as you are. We create spaces tailored to your personal style, ensuring every detail reflects your individuality.",
-    buttonText: "Get Started",
+const HeroScene = dynamic(() => import("@/components/three/HeroScene"), {
+  ssr: false,
+  loading: () => null,
+});
+
+const TICKER_ITEMS = [
+  "Architecture",
+  "Interior Design",
+  "3D Visualization",
+  "Commercial Spaces",
+  "Residential Projects",
+  "Retail Design",
+  "Award-Winning Studio",
+  "Ahmedabad, India",
+];
+
+const SERVICES = [
+  {
+    num: "01",
+    title: "Architecture",
+    desc: "From concept to completion, we design buildings that stand as testaments to craft and vision.",
+    scene: "architecture",
   },
-  about: {
-    title: "Elevating the Art of\nStylish Living",
-    description:
-      "We design spaces that blend beauty and function. Every project is thoughtfully crafted to reflect your unique style and needs, creating environments that are both timeless and practical.",
-    phone: "+91 98257 39499",
-    buttonText: "Get Free Estimate",
+  {
+    num: "02",
+    title: "Interior Design",
+    desc: "Spaces that breathe — curated material palettes, bespoke furniture, and immersive atmospheres.",
+    scene: "interior",
   },
-  stats: [
-    { value: "25+", label: "Years Of Experience" },
-    { value: "85+", label: "Success Project" },
-    { value: "3+", label: "Active Project" },
-    { value: "100+", label: "Happy Customers" },
-  ],
-  services: [
-    {
-      title: "Project Plan",
-      content:
-        "While there are countless variations of passages available, not all are created equal. At M-Cad, we prioritize precision and quality in every aspect of our projects. Our approach ensures that each phase, from concept to completion, is meticulously crafted to meet your unique needs.",
-    },
-    {
-      title: "Interior Work",
-      content:
-        "Interior design is more than just aesthetics; it's about creating spaces that resonate with your lifestyle. While there are many approaches to design, we focus on delivering results that combine functionality with elegance. Our team ensures that every detail is thoughtfully curated, resulting in interiors that are both beautiful and practical.",
-    },
-    {
-      title: "Realization",
-      content:
-        "Turning ideas into reality requires skill, precision, and a deep understanding of both design and execution. While there are many ways to approach a project, we believe in a method that guarantees quality and attention to detail. Our commitment is to bring your vision to life, ensuring that the final realization surpasses your expectations.",
-    },
-  ],
-  followTitle: "Follow Our Projects",
-  followSubtitle:
-    "Stay connected with our latest work. Explore how we transform ideas into stunning spaces, showcasing the art of thoughtful design and execution.",
+  {
+    num: "03",
+    title: "3D Visualization",
+    desc: "Photorealistic renders and walkthroughs that communicate design intent before a single brick is laid.",
+    scene: "visualization",
+  },
+  {
+    num: "04",
+    title: "Retail Design",
+    desc: "Environments that convert — retail environments crafted for flow, emotion, and brand identity.",
+    scene: "retail",
+  },
+];
+
+const PROCESS = [
+  { step: "01", title: "Discover", desc: "Deep-dive workshops to understand your vision, constraints, and aspirations." },
+  { step: "02", title: "Concept", desc: "Spatial narratives translated into bold schematic designs and material stories." },
+  { step: "03", title: "Develop", desc: "Technical detailing, coordination, and refined documentation." },
+  { step: "04", title: "Deliver", desc: "On-site supervision through to handover — every detail accounted for." },
+];
+
+const DEFAULT_STATS = [
+  { value: 24, suffix: "+", label: "Years of Practice" },
+  { value: 340, suffix: "+", label: "Projects Completed" },
+  { value: 18, suffix: "", label: "Design Awards" },
+  { value: 12, suffix: "", label: "Cities Across India" },
+];
+
+const DEFAULT_HERO = {
+  eyebrow: "Architecture & Interior Design",
+  title: "We sculpt\nspace into\nnarrative.",
+  sub: "Award-winning architecture firm based in Ahmedabad, crafting residential, commercial, and retail environments since 2000.",
 };
 
-export default function Home() {
-  const [triggered, setTriggered] = useState(true);
-  const [triggered2, setTriggered2] = useState(false);
-  const [triggered3, setTriggered3] = useState(false);
-  const [triggered4, setTriggered4] = useState(false);
-  const [triggered5, setTriggered5] = useState(false);
-  const [cms, setCms] = useState(DEFAULT);
-  const router = useRouter();
+export default function HomePage() {
+  const [hero, setHero] = useState(DEFAULT_HERO);
+  const [stats, setStats] = useState(DEFAULT_STATS);
+  const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("/api/cms/home")
-      .then((res) => {
-        if (res.data?.data) setCms({ ...DEFAULT, ...res.data.data });
-      })
-      .catch(() => {});
+    axios.get("/api/cms/home").then((r) => {
+      const c = r.data?.data;
+      if (!c) return;
+      if (c.hero) setHero((prev) => ({ ...prev, ...c.hero }));
+      if (c.stats?.length) {
+        setStats(c.stats.map((s, i) => ({
+          ...DEFAULT_STATS[i],
+          ...s,
+          value: Number(s.value) || DEFAULT_STATS[i]?.value || 0,
+        })));
+      }
+    }).catch(() => {});
+
+    axios.get("/api/projectDetails").then((r) => {
+      if (r.data?.data) setProjects(r.data.data.slice(0, 6));
+    }).catch(() => {});
   }, []);
 
-  const hero = { ...DEFAULT.hero, ...cms.hero };
-  const about = { ...DEFAULT.about, ...cms.about };
-  const stats = cms.stats?.length ? cms.stats : DEFAULT.stats;
-  const services = cms.services?.length ? cms.services : DEFAULT.services;
-
   return (
-    <main className="flex min-h-screen flex-col items-center text-center one fadeIn animate">
-      <div className="vacancy-image md:rounded-bl-[300px] w-full h-[90vh] flex items-center ">
-        <ScrollAnimation setTriggered={setTriggered} triggered={triggered} />
+    <>
+      {/* ── 1. Hero ── */}
+      <section
+        style={{
+          position: "relative",
+          minHeight: "100svh",
+          display: "flex",
+          alignItems: "center",
+          overflow: "hidden",
+          background: "var(--color-bg)",
+        }}
+      >
         <div
-          className={`flex flex-col lg:ml-[20%] lg:w-1/3 max-sm:p-5 ${
-            triggered ? " animate fadeInUp " : "hidden"
-          }`}
+          aria-hidden
+          style={{ position: "absolute", inset: 0, zIndex: 0 }}
         >
-          <span
-            className="text-5xl lg:text-7xl"
-            style={{ fontFamily: `${jost.style.fontFamily}` }}
+          <HeroScene />
+        </div>
+
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "linear-gradient(to right, var(--color-bg) 40%, transparent 100%)",
+            zIndex: 1,
+          }}
+        />
+
+        <div
+          className="site-container"
+          style={{ position: "relative", zIndex: 2, paddingTop: "7rem", paddingBottom: "5rem" }}
+        >
+          <p
+            className="text-micro"
+            style={{
+              color: "var(--color-primary)",
+              marginBottom: "1.5rem",
+              animation: "fadeInUp 0.7s 0.1s cubic-bezier(0.16,1,0.3,1) both",
+            }}
           >
-            {hero.title.split("\n").map((line, i) => (
-              <span key={i}>
-                {line}
-                {i < hero.title.split("\n").length - 1 && <br />}
-              </span>
-            ))}
-          </span>
-          <span className="py-4">{hero.subtitle}</span>
-          <ButtonDark name={hero.buttonText} />
-        </div>
-      </div>
-      <div className="lg:w-[70%] justify-center items-center">
-        <ScrollAnimation setTriggered={setTriggered2} triggered={triggered2} />
-        <div
-          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 my-40 max-sm:my-20 max-sm:p-5animate fadeInDown one`}
-        >
-          {services.map((s, i) => (
-            <ReadmoreCard key={i} title={s.title} contant={s.content} />
-          ))}
-        </div>
-        <ScrollAnimation setTriggered={setTriggered3} triggered={triggered3} />
-        <div className="flex max-sm:flex-col-reverse mb-20 ">
+            {hero.eyebrow}
+          </p>
+          <h1
+            className="font-cormorant text-hero"
+            style={{
+              color: "var(--color-text)",
+              maxWidth: "10ch",
+              whiteSpace: "pre-line",
+              animation: "fadeInUp 0.7s 0.2s cubic-bezier(0.16,1,0.3,1) both",
+            }}
+          >
+            {hero.title}
+          </h1>
+          <p
+            style={{
+              color: "var(--color-text-muted)",
+              maxWidth: "460px",
+              marginTop: "1.5rem",
+              fontSize: "1rem",
+              lineHeight: 1.7,
+              animation: "fadeInUp 0.7s 0.35s cubic-bezier(0.16,1,0.3,1) both",
+            }}
+          >
+            {hero.sub}
+          </p>
           <div
-            className={`flex flex-col justify-between max-sm:p-5 w-full ${
-              triggered3 ? "animate fadeInLeft one" : "hidden"
-            }`}
+            style={{
+              display: "flex",
+              gap: "1rem",
+              marginTop: "2.5rem",
+              flexWrap: "wrap",
+              animation: "fadeInUp 0.7s 0.5s cubic-bezier(0.16,1,0.3,1) both",
+            }}
           >
-            <span
-              className="text-5xl"
-              style={{ fontFamily: `${jost.style.fontFamily}` }}
+            <Link
+              href="/projects"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.6rem",
+                fontSize: "0.8rem",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "var(--color-bg)",
+                background: "var(--color-primary)",
+                padding: "0.875rem 2rem",
+              }}
             >
-              {about.title.split("\n").map((line, i) => (
-                <span key={i}>
-                  {line}
-                  {i < about.title.split("\n").length - 1 && <br />}
-                </span>
-              ))}
-            </span>
-            <span className="my-8">{about.description}</span>
-            <div className="flex">
-              <Icons name="Call-Icon" />
-              <div className="ml-4 flex flex-col">
-                <span className="font-bold">{about.phone}</span>
-                <span>Call Us Anytime</span>
-              </div>
-            </div>
-            <div className="mt-8">
-              <ButtonDark
-                name={about.buttonText}
-                handlesubmit={() => router.push("/contact")}
-              />
-            </div>
+              View Work
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </Link>
+            <Link
+              href="/contact"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.6rem",
+                fontSize: "0.8rem",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "var(--color-text)",
+                border: "1px solid var(--color-border)",
+                padding: "0.875rem 2rem",
+              }}
+            >
+              Get in Touch
+            </Link>
           </div>
+
           <div
-            className={`flex items-end justify-end max-sm:p-5 w-full ${
-              triggered3 ? "animate fadeInRight one" : "hidden"
-            }`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              marginTop: "4rem",
+              animation: "fadeInUp 0.7s 0.8s cubic-bezier(0.16,1,0.3,1) both",
+            }}
           >
-            <Image
-              src={`/images/Dashboard2.webp`}
-              width={500}
-              height={100}
-              alt="architecture-about"
-              className="mt-[20px] rounded-tr-[300px] rounded-bl-[100px] max-sm:rounded-3xl"
+            <div
+              style={{
+                width: "1px",
+                height: "40px",
+                background: "var(--color-primary)",
+              }}
             />
+            <span className="text-micro" style={{ color: "var(--color-text-faint)" }}>Scroll</span>
           </div>
         </div>
-        <ScrollAnimation setTriggered={setTriggered4} triggered={triggered4} />
-        <div
-          className={`flex flex-col items-center my-40 max-sm:p-5 ${
-            triggered4 ? "animate fadeInUp one" : "hidden"
-          }`}
-        >
-          <span
-            className="text-5xl"
-            style={{ fontFamily: `${jost.style.fontFamily}` }}
+      </section>
+
+      {/* ── 2. Marquee ── */}
+      <div
+        style={{
+          borderTop: "1px solid var(--color-border)",
+          borderBottom: "1px solid var(--color-border)",
+          padding: "1rem 0",
+          background: "var(--color-surface)",
+        }}
+      >
+        <MarqueeTicker items={TICKER_ITEMS} />
+      </div>
+
+      {/* ── 3. About / Stats ── */}
+      <section className="section-padding" style={{ background: "var(--color-bg)" }}>
+        <div className="site-container">
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: "4rem",
+              alignItems: "center",
+            }}
           >
-            {cms.followTitle || DEFAULT.followTitle}
-          </span>
-          <span className="mt-2 w-1/2 max-sm:w-full">
-            {cms.followSubtitle || DEFAULT.followSubtitle}
-          </span>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-32 gap-y-24 my-20">
-            <div className="flex flex-col">
-              <Image
-                src={`/images/Dashboard3.webp`}
-                width={500}
-                height={100}
-                alt="project-1"
-                className=" rounded-tr-[100px]"
-              />
-              <div className="flex justify-between items-center mt-10">
-                <div className="flex flex-col ">
-                  <span
-                    className="text-2xl"
-                    style={{ fontFamily: `${jost.style.fontFamily}` }}
-                  >
-                    Modern Kitchen
-                  </span>
-                  <span className="mt-2"> Decor / Architecture</span>
-                </div>
-                <Icons name={"Next-Arrow"} />
+            <div>
+              <p className="text-micro" style={{ color: "var(--color-primary)", marginBottom: "1rem" }}>
+                About MCAD
+              </p>
+              <h2 className="font-cormorant text-h2" style={{ color: "var(--color-text)", marginBottom: "1.5rem" }}>
+                Architecture rooted in<br />
+                <em>intention.</em>
+              </h2>
+              <div style={{ color: "var(--color-text-muted)", lineHeight: 1.8, display: "flex", flexDirection: "column", gap: "1rem" }}>
+                <p>
+                  For over two decades, MCAD has shaped the built environment of western India — from landmark commercial towers to intimate private residences.
+                </p>
+                <p>
+                  Every project begins with rigorous listening. We immerse ourselves in your world before we draw a single line.
+                </p>
               </div>
+              <Link
+                href="/projects"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  marginTop: "2rem",
+                  fontSize: "0.8rem",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: "var(--color-primary)",
+                  borderBottom: "1px solid var(--color-primary)",
+                  paddingBottom: "2px",
+                }}
+              >
+                Explore our portfolio
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </Link>
             </div>
-            <div className="flex flex-col">
-              <Image
-                src={`/images/Dashboard4.webp`}
-                width={500}
-                height={100}
-                alt="project-2"
-                className=" rounded-tl-[100px]"
-              />
-              <div className="flex justify-between items-center mt-10">
-                <div className="flex flex-col ">
-                  <span
-                    className="text-2xl"
-                    style={{ fontFamily: `${jost.style.fontFamily}` }}
-                  >
-                    Modern Kitchen
-                  </span>
-                  <span className="mt-2"> Decor / Architecture</span>
-                </div>
-                <Icons name={"Next-Arrow"} />
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <Image
-                src={`/images/Dashboard3.webp`}
-                width={500}
-                height={100}
-                alt="project-3"
-                className=" rounded-br-[100px]"
-              />
-              <div className="flex justify-between items-center mt-10">
-                <div className="flex flex-col ">
-                  <span
-                    className="text-2xl"
-                    style={{ fontFamily: `${jost.style.fontFamily}` }}
-                  >
-                    Modern Kitchen
-                  </span>
-                  <span className="mt-2"> Decor / Architecture</span>
-                </div>
-                <Icons name={"Next-Arrow"} />
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <Image
-                src={`/images/Dashboard5.webp`}
-                width={500}
-                height={100}
-                alt="project-4"
-                className=" rounded-bl-[100px]"
-              />
-              <div className="flex justify-between items-center mt-10">
-                <div className="flex flex-col ">
-                  <span
-                    className="text-2xl"
-                    style={{ fontFamily: `${jost.style.fontFamily}` }}
-                  >
-                    Modern Kitchen
-                  </span>
-                  <span className="mt-2"> Decor / Architecture</span>
-                </div>
-                <Icons name={"Next-Arrow"} />
-              </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "3rem",
+              }}
+            >
+              {stats.map((s) => (
+                <StatsCounter key={s.label} value={s.value} suffix={s.suffix} label={s.label} />
+              ))}
             </div>
           </div>
         </div>
-      </div>
-      <div className="bg-[#F4F0EC] py-16 w-full flex items-center justify-center">
-        <ScrollAnimation setTriggered={setTriggered5} triggered={triggered5} />
-        <div
-          className={`grid grid-cols-1 lg:grid-cols-4  w-[70%] gap-y-4 lg:divide-x-4 max-sm:p-5 ${
-            triggered5 ? "animate fadeInUp one" : "hidden"
-          }`}
-        >
-          {stats.map((stat, i) => (
-            <div key={i} className="flex flex-col items-center justify-center">
-              <span
-                className="text-7xl text-[#CDA274]"
-                style={{ fontFamily: `${jost.style.fontFamily}` }}
+      </section>
+
+      {/* ── 4. Services ── */}
+      <section
+        className="section-padding"
+        style={{ background: "var(--color-surface)", borderTop: "1px solid var(--color-border)" }}
+      >
+        <div className="site-container">
+          <div style={{ marginBottom: "4rem" }}>
+            <p className="text-micro" style={{ color: "var(--color-primary)", marginBottom: "1rem" }}>
+              What We Do
+            </p>
+            <h2 className="font-cormorant text-h2" style={{ color: "var(--color-text)" }}>
+              Our disciplines
+            </h2>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            {SERVICES.map((svc, i) => (
+              <div
+                key={svc.num}
+                style={{
+                  borderRight: i < SERVICES.length - 1 ? "1px solid var(--color-border)" : "none",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
               >
-                {stat.value}
-              </span>
-              <span className="text-[#4D5053]">{stat.label}</span>
-            </div>
-          ))}
+                {/* 3D scene */}
+                <div
+                  style={{
+                    height: "200px",
+                    position: "relative",
+                    borderBottom: "1px solid var(--color-border)",
+                    overflow: "hidden",
+                    background: "var(--color-bg)",
+                  }}
+                >
+                  <ServiceScene type={svc.scene} />
+                  {/* subtle radial glow behind canvas */}
+                  <div
+                    aria-hidden
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background: "radial-gradient(circle at 50% 60%, rgba(200,169,110,0.06) 0%, transparent 70%)",
+                      pointerEvents: "none",
+                    }}
+                  />
+                </div>
+
+                {/* Text */}
+                <div style={{ padding: "2rem" }}>
+                  <span
+                    className="font-mono-custom"
+                    style={{
+                      fontSize: "0.7rem",
+                      color: "var(--color-primary)",
+                      display: "block",
+                      marginBottom: "0.75rem",
+                    }}
+                  >
+                    {svc.num}
+                  </span>
+                  <h3
+                    className="font-cormorant"
+                    style={{
+                      fontSize: "clamp(1.3rem, 1.8vw, 1.8rem)",
+                      color: "var(--color-text)",
+                      fontWeight: 400,
+                      marginBottom: "0.75rem",
+                    }}
+                  >
+                    {svc.title}
+                  </h3>
+                  <p style={{ color: "var(--color-text-muted)", fontSize: "0.875rem", lineHeight: 1.7 }}>
+                    {svc.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="my-20 lg:w-[70%]">
-        <ContactUs />
-      </div>
-    </main>
+      </section>
+
+      {/* ── 5. Featured Projects ── */}
+      {projects.length > 0 && (
+        <section className="section-padding" style={{ background: "var(--color-bg)" }}>
+          <div className="site-container">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-end",
+                marginBottom: "3rem",
+                flexWrap: "wrap",
+                gap: "1rem",
+              }}
+            >
+              <div>
+                <p className="text-micro" style={{ color: "var(--color-primary)", marginBottom: "0.75rem" }}>
+                  Selected Work
+                </p>
+                <h2 className="font-cormorant text-h2" style={{ color: "var(--color-text)" }}>
+                  Featured projects
+                </h2>
+              </div>
+              <Link
+                href="/projects"
+                style={{
+                  fontSize: "0.8rem",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: "var(--color-text-muted)",
+                  borderBottom: "1px solid var(--color-border)",
+                  paddingBottom: "2px",
+                }}
+              >
+                All Projects →
+              </Link>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+                gap: "1.5rem",
+              }}
+            >
+              {projects.map((p, i) => (
+                <ProjectCard key={p._id} project={p} index={i} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── 6. Process ── */}
+      <section
+        className="section-padding"
+        style={{ background: "var(--color-surface)", borderTop: "1px solid var(--color-border)" }}
+      >
+        <div className="site-container">
+          <div style={{ marginBottom: "4rem" }}>
+            <p className="text-micro" style={{ color: "var(--color-primary)", marginBottom: "0.75rem" }}>
+              How We Work
+            </p>
+            <h2 className="font-cormorant text-h2" style={{ color: "var(--color-text)" }}>
+              Our process
+            </h2>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            }}
+          >
+            {PROCESS.map((p) => (
+              <div
+                key={p.step}
+                style={{
+                  padding: "2rem",
+                  borderLeft: "1px solid var(--color-border)",
+                  position: "relative",
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: -5,
+                    width: 10,
+                    height: 10,
+                    borderRadius: "50%",
+                    background: "var(--color-primary)",
+                    border: "2px solid var(--color-bg)",
+                  }}
+                />
+                <span
+                  className="font-mono-custom"
+                  style={{
+                    fontSize: "0.65rem",
+                    color: "var(--color-text-faint)",
+                    display: "block",
+                    marginBottom: "1rem",
+                    letterSpacing: "0.12em",
+                  }}
+                >
+                  {p.step}
+                </span>
+                <h3
+                  className="font-cormorant"
+                  style={{
+                    fontSize: "clamp(1.3rem, 2vw, 1.8rem)",
+                    color: "var(--color-text)",
+                    fontWeight: 400,
+                    marginBottom: "0.75rem",
+                  }}
+                >
+                  {p.title}
+                </h3>
+                <p style={{ color: "var(--color-text-muted)", fontSize: "0.875rem", lineHeight: 1.7 }}>
+                  {p.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 7. CTA Banner ── */}
+      <CTABanner />
+    </>
   );
 }

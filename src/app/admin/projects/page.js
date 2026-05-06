@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import Image from "next/image";
 import Link from "next/link";
 import BuildingLoading from "@/components/loader/pageLoader";
 import { toast } from "sonner";
@@ -157,11 +156,9 @@ export default function Projects() {
                 i < filtered.length - 1 ? "border-b border-gray-50" : ""
               } hover:bg-gray-50 transition-colors`}
             >
-              <Image
+              <img
                 src={project.image || "/images/Logo.webp"}
                 alt={project.title}
-                width={56}
-                height={56}
                 className="rounded-xl object-cover w-14 h-14 shrink-0"
               />
               <div className="flex-1 min-w-0">

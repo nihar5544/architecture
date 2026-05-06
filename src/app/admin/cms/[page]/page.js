@@ -1,6 +1,5 @@
 "use client";
 import axios from "axios";
-import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -52,7 +51,7 @@ function ImageUpload({ label, value, onChange, fallback }) {
       >
         {displaySrc ? (
           <>
-            <Image src={displaySrc} alt={label} fill className="object-cover" />
+            <img src={displaySrc} alt={label} className="object-cover w-full h-full" />
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
               <span className="text-white text-xs font-medium">Click to change</span>
             </div>

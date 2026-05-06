@@ -1,7 +1,6 @@
 "use client";
 import BuildingLoading from "@/components/loader/pageLoader";
 import axios from "axios";
-import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -163,15 +162,10 @@ export default function EditProject() {
           >
             {coverBase64 ? (
               <>
-                <Image
-                  src={
-                    newCoverFile
-                      ? URL.createObjectURL(newCoverFile)
-                      : coverBase64
-                  }
+                <img
+                  src={newCoverFile ? URL.createObjectURL(newCoverFile) : coverBase64}
                   alt="Cover"
-                  fill
-                  className="object-cover"
+                  className="object-cover w-full h-full"
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                   <span className="text-white text-sm font-medium">Click to change</span>
@@ -207,7 +201,7 @@ export default function EditProject() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {galleryBase64.map((src, i) => (
               <div key={i} className="relative group h-32 rounded-xl overflow-hidden border border-gray-100">
-                <Image src={src} alt={`Gallery ${i + 1}`} fill className="object-cover" />
+                <img src={src} alt={`Gallery ${i + 1}`} className="object-cover w-full h-full" />
                 <button
                   type="button"
                   onClick={() => removeGallery(i)}
