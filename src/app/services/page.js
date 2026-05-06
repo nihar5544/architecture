@@ -1,63 +1,62 @@
-import ReadmoreCard from "@/components/cards/ReadmoreCard";
-import PageHeader from "@/components/navigationbar/PageHeader";
-import Image from "next/image";
-import React from "react";
-import { DM_Serif_Display } from "next/font/google";
-const jost = DM_Serif_Display({ weight: "400", subsets: ["latin"] });
-import Icons from "@/components/icons";
-import ContactUs from "@/components/cards/ContactUs";
+import Link from "next/link";
+import CTABanner from "@/components/ui/CTABanner";
 import { dbConnect } from "../../../utils/dbConnect";
 import SiteContent from "../../../models/SiteContent";
+
+export const metadata = {
+  title: "Services",
+  description: "Our architecture and interior design services — from concept through to delivery.",
+};
 
 const DEFAULT = {
   cards: [
     {
-      title: "Project Plan",
-      content:
-        "Every project is unique, and so is our approach. While there are numerous methods to plan and execute, our process is tailored to ensure precision and success at every stage. From concept to completion, we focus on delivering exceptional results that align with your vision.",
+      title: "Architecture",
+      content: "From site analysis and concept through technical documentation, our architecture service covers every phase with precision — delivering buildings that stand as testaments to craft and vision.",
     },
     {
-      title: "Interior Work",
-      content:
-        "Interior design is more than just aesthetics—it's about creating spaces that truly reflect your personality and needs. We offer various approaches, each one focused on blending beauty with functionality to craft interiors that are as practical as they are stunning.",
+      title: "Interior Design",
+      content: "Spaces that breathe. Curated material palettes, bespoke joinery, and immersive atmospheres that bring your brand or lifestyle into every corner.",
     },
     {
       title: "Retail Design",
-      content:
-        "Retail spaces require a special touch to attract and engage customers. Our design strategies incorporate creativity and customer behavior insights to craft spaces that enhance the shopping experience. We explore a wide range of design possibilities, ensuring that your retail environment stands out and thrives.",
+      content: "Environments built for conversion — retail interiors crafted for flow, emotion, and brand storytelling that turns visitors into loyal customers.",
     },
   ],
   steps: [
     {
       number: "01",
-      title: "Concept & Details",
-      description:
-        "We start by understanding your vision, meticulously crafting the concept and refining every detail to ensure a strong foundation for your project.",
+      title: "Discover & Define",
+      description: "We begin with immersive workshops to understand your vision, context, and constraints — mapping out a brief that becomes the DNA of the project.",
       image: "",
     },
     {
       number: "02",
-      title: "Strategic Planning",
-      description:
-        "Our team develops a comprehensive plan, blending innovative ideas with practical solutions to bring your project to life with precision and creativity.",
+      title: "Concept Design",
+      description: "Spatial narratives are translated into bold schematic designs, material boards, and 3D visualizations that communicate intent clearly.",
       image: "",
     },
     {
       number: "03",
-      title: "Design Excellence",
-      description:
-        "We transform concepts into captivating designs, balancing aesthetics with functionality to create spaces that inspire and endure.",
+      title: "Design Development",
+      description: "Concepts are refined into detailed technical drawings, specification schedules, and fully coordinated construction documents.",
       image: "",
     },
     {
       number: "04",
-      title: "Perfect Execution",
-      description:
-        "Every project is executed with utmost care, ensuring flawless results that exceed expectations and bring your vision to reality.",
+      title: "Delivery & Handover",
+      description: "On-site supervision, contractor coordination, and meticulous quality control through to handover — with every detail exactly as designed.",
       image: "",
     },
   ],
 };
+
+const STATIC_IMAGES = [
+  "/images/Service1.webp",
+  "/images/Service2.webp",
+  "/images/Service3.webp",
+  "/images/Service4.webp",
+];
 
 async function getContent() {
   try {
@@ -73,116 +72,202 @@ async function getContent() {
   }
 }
 
-const staticImages = [
-  "/images/Service1.webp",
-  "/images/Service2.webp",
-  "/images/Service3.webp",
-  "/images/Service4.webp",
-];
-
 export default async function ServicesPage() {
-  const content = await getContent();
-  const { cards, steps } = content;
+  const { cards, steps } = await getContent();
 
   return (
-    <div className="w-full flex flex-col justify-center items-center one fadeIn animate">
-      <PageHeader name={"Services"} />
-      <div className="lg:w-[70%] flex flex-col">
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 my-40 max-sm:my-20 max-sm:p-5">
-          {cards.map((card, i) => (
-            <ReadmoreCard key={i} title={card.title} contant={card.content} />
-          ))}
-        </div>
-        <div className="w-full rounded-2xl bg-[#F4F0EC] flex flex-col items-center justify-center lg:p-4">
-          <span
-            className="text-5xl mb-2 mt-8"
-            style={{ fontFamily: `${jost.style.fontFamily}` }}
+    <>
+      {/* ── Hero ── */}
+      <section
+        style={{
+          paddingTop: "clamp(8rem, 12vw, 14rem)",
+          paddingBottom: "clamp(4rem, 6vw, 8rem)",
+          background: "var(--color-bg)",
+          borderBottom: "1px solid var(--color-border)",
+        }}
+      >
+        <div className="site-container">
+          <p className="text-micro" style={{ color: "var(--color-primary)", marginBottom: "1rem" }}>
+            Our Disciplines
+          </p>
+          <h1
+            className="font-cormorant text-display"
+            style={{ color: "var(--color-text)", maxWidth: "14ch" }}
           >
-            How We Work
-          </span>
-          <div className="flex flex-col p-20">
+            Architecture that speaks before you enter.
+          </h1>
+        </div>
+      </section>
+
+      {/* ── Service Cards ── */}
+      <section className="section-padding" style={{ background: "var(--color-bg)" }}>
+        <div className="site-container">
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gap: "1.5rem",
+            }}
+          >
+            {cards.map((card, i) => (
+              <div
+                key={i}
+                style={{
+                  padding: "2.5rem",
+                  border: "1px solid var(--color-border)",
+                  background: "var(--color-surface)",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                <span
+                  className="font-mono-custom"
+                  style={{
+                    fontSize: "0.65rem",
+                    color: "var(--color-text-faint)",
+                    display: "block",
+                    marginBottom: "1.5rem",
+                    letterSpacing: "0.12em",
+                  }}
+                >
+                  0{i + 1}
+                </span>
+                <h2
+                  className="font-cormorant"
+                  style={{
+                    fontSize: "clamp(1.6rem, 2.5vw, 2.5rem)",
+                    fontWeight: 400,
+                    color: "var(--color-text)",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  {card.title}
+                </h2>
+                <p style={{ color: "var(--color-text-muted)", fontSize: "0.9rem", lineHeight: 1.75 }}>
+                  {card.content}
+                </p>
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    width: "0%",
+                    height: "2px",
+                    background: "var(--color-primary)",
+                    transition: "width 0.4s ease",
+                  }}
+                  className="service-card-line"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── How We Work ── */}
+      <section
+        className="section-padding"
+        style={{ background: "var(--color-surface)", borderTop: "1px solid var(--color-border)" }}
+      >
+        <div className="site-container">
+          <div style={{ marginBottom: "5rem" }}>
+            <p className="text-micro" style={{ color: "var(--color-primary)", marginBottom: "1rem" }}>
+              Our Process
+            </p>
+            <h2 className="font-cormorant text-h2" style={{ color: "var(--color-text)" }}>
+              How we work
+            </h2>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {steps.map((step, i) => {
-              const imgSrc = step.image || staticImages[i] || staticImages[0];
+              const imgSrc = step.image || STATIC_IMAGES[i] || STATIC_IMAGES[0];
               const isEven = i % 2 === 0;
+
               return (
                 <div
                   key={i}
-                  className={`grid grid-cols-1 lg:grid-cols-2 mb-20 ${
-                    isEven ? "" : ""
-                  }`}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                    gap: "0",
+                    borderTop: "1px solid var(--color-border)",
+                    padding: "3rem 0",
+                  }}
                 >
-                  {isEven ? (
-                    <>
-                      <Image
-                        src={imgSrc}
-                        width={400}
-                        height={400}
-                        alt={step.title}
-                        className=""
-                      />
-                      <div className="flex flex-col justify-evenly">
-                        <div className="flex justify-between">
-                          <Icons name={"service1"} />
-                          <span
-                            className="text-7xl text-white mb-2"
-                            style={{ fontFamily: `${jost.style.fontFamily}` }}
-                          >
-                            {step.number}
-                          </span>
-                        </div>
-                        <div className="flex flex-col">
-                          <span
-                            className="text-4xl mb-2 text-back"
-                            style={{ fontFamily: `${jost.style.fontFamily}` }}
-                          >
-                            {step.title}
-                          </span>
-                          <span>{step.description}</span>
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="flex flex-col justify-evenly">
-                        <div className="flex justify-between">
-                          <Icons name={"service1"} />
-                          <span
-                            className="text-7xl text-white mb-2"
-                            style={{ fontFamily: `${jost.style.fontFamily}` }}
-                          >
-                            {step.number}
-                          </span>
-                        </div>
-                        <div className="flex flex-col">
-                          <span
-                            className="text-4xl mb-2 text-back"
-                            style={{ fontFamily: `${jost.style.fontFamily}` }}
-                          >
-                            {step.title}
-                          </span>
-                          <span>{step.description}</span>
-                        </div>
-                      </div>
-                      <div className="flex justify-end">
-                        <Image
-                          src={imgSrc}
-                          width={400}
-                          height={400}
-                          alt={step.title}
-                          className=""
-                        />
-                      </div>
-                    </>
-                  )}
+                  {/* Image */}
+                  <div
+                    style={{
+                      order: isEven ? 0 : 1,
+                      overflow: "hidden",
+                      maxHeight: "420px",
+                    }}
+                  >
+                    <img
+                      src={imgSrc}
+                      alt={step.title}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        display: "block",
+                        transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1)",
+                      }}
+                    />
+                  </div>
+
+                  {/* Text */}
+                  <div
+                    style={{
+                      order: isEven ? 1 : 0,
+                      padding: "clamp(2rem, 4vw, 4rem)",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <span
+                      className="font-cormorant"
+                      style={{
+                        fontSize: "clamp(4rem, 8vw, 8rem)",
+                        lineHeight: 1,
+                        color: "var(--color-text-faint)",
+                        fontWeight: 400,
+                        display: "block",
+                        marginBottom: "1rem",
+                      }}
+                    >
+                      {step.number}
+                    </span>
+                    <h3
+                      className="font-cormorant"
+                      style={{
+                        fontSize: "clamp(1.5rem, 2.5vw, 2.5rem)",
+                        fontWeight: 400,
+                        color: "var(--color-text)",
+                        marginBottom: "1rem",
+                      }}
+                    >
+                      {step.title}
+                    </h3>
+                    <p style={{ color: "var(--color-text-muted)", lineHeight: 1.8, maxWidth: "480px" }}>
+                      {step.description}
+                    </p>
+                  </div>
                 </div>
               );
             })}
           </div>
         </div>
-        <div className="my-40">
-          <ContactUs />
-        </div>
-      </div>
-    </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <CTABanner
+        eyebrow="Ready to Begin?"
+        heading="Your project starts\nwith a conversation."
+        cta="Contact the Studio"
+        ctaHref="/contact"
+      />
+    </>
   );
 }

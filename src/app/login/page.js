@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DM_Serif_Display } from "next/font/google";
 import axios from "axios";
 import { toast } from "sonner";
@@ -16,6 +16,12 @@ function Page() {
   const [showPassword, setShowPassword] = useState(false);
   const [loader, setLoader] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    document.body.classList.add("admin-page");
+    return () => document.body.classList.remove("admin-page");
+  }, []);
+
   // Handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -54,8 +60,6 @@ function Page() {
               <input
                 id="email"
                 placeholder="Enter Email"
-                variant="outlined"
-                fullWidth
                 required
                 className="w-full border-gray-300 border p-2 rounded-xl mb-6"
                 value={email}

@@ -4,38 +4,19 @@ export function proxy(request) {
   const { pathname } = request.nextUrl;
   const authToken = request.cookies.get("authToken")?.value;
 
-  const isAuthRoute = ["/login"].includes(pathname);
-  const isProtectedRoute = ["/admin/create", "/admin"].some((route) =>
-    pathname.startsWith(route)
-  );
-
-  if (authToken && isAuthRoute) {
-    return NextResponse.redirect(new URL("/admin", request.url));
-  }
-  if (!authToken && isProtectedRoute) {
-    if (pathname.startsWith("/api")) {
-      return NextResponse.json(
-        { message: "Access Denied !!", success: false },
-        { status: 401 }
-      );
-    }
+  // Protect all /admin routes — redirect to login if not authenticated
+  if (pathname.startsWith("/admin") && !authToken) {
     return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  // If already logged in, skip the login page
+  if (pathname === "/login" && authToken) {
+    return NextResponse.redirect(new URL("/admin", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/",
-    "/admin",
-    "/admin/create",
-    "/admin/inquiry-details",
-    "/admin/projects",
-    "/contact",
-    "/login",
-    "/services",
-    "/projects",
-    "/api/:path*",
-  ],
+  matcher: ["/admin/:path*", "/login"],
 };

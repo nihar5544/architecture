@@ -1,4 +1,5 @@
 "use client";
+ import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
@@ -75,6 +76,11 @@ const navLinks = [
 export default function AdminLayout({ children }) {
   const pathname = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    document.body.classList.add("admin-page");
+    return () => document.body.classList.remove("admin-page");
+  }, []);
 
   async function handleLogout() {
     try {

@@ -3,21 +3,23 @@ import axios from "axios";
 import { useState, useRef } from "react";
 import { toast } from "sonner";
 
+const CATEGORIES = ["Architecture", "Interior Design", "Retail Design", "Commercial", "Residential"];
+
 const TEMPLATE = [
   {
     title: "Modern Living Room",
     Client: "Jane Smith",
     Category: "Residential",
-    Location: "Sydney, AU",
+    Location: "Ahmedabad, IN",
     Date: "2024",
-    Link: "https://example.com",
-    description: "A spacious modern living room with open plan design.",
+    Link: "",
+    description: "",
     image: "",
     otherImage: [],
   },
 ];
 
-const REQUIRED_FIELDS = ["title", "Client", "Category", "Location", "Date", "description"];
+const REQUIRED_FIELDS = ["title", "Client", "Category", "Location", "Date"];
 
 export default function BulkUploadPage() {
   const [file, setFile] = useState(null);
@@ -129,12 +131,24 @@ export default function BulkUploadPage() {
               </span>
             ))}
             <span className="px-2.5 py-1 bg-gray-50 text-gray-400 rounded-lg text-xs font-mono">
+              description (optional)
+            </span>
+            <span className="px-2.5 py-1 bg-gray-50 text-gray-400 rounded-lg text-xs font-mono">
               Link (optional)
             </span>
             <span className="px-2.5 py-1 bg-gray-50 text-gray-400 rounded-lg text-xs font-mono">
               image (optional)
             </span>
           </div>
+          <p className="mt-3 text-xs text-gray-400">
+            Valid categories:{" "}
+            {CATEGORIES.map((c, i) => (
+              <span key={c}>
+                <code className="bg-gray-100 px-1 rounded">{c}</code>
+                {i < CATEGORIES.length - 1 ? ", " : ""}
+              </span>
+            ))}
+          </p>
         </div>
 
         {/* Upload area */}
