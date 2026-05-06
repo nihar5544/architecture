@@ -87,17 +87,19 @@ export default function ProjectCard({ project, index = 0 }) {
 
       {/* Info */}
       <div style={{ padding: "1.25rem 1.25rem 1.5rem" }}>
-        <div
-          style={{
-            fontSize: "0.7rem",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            color: "var(--color-primary)",
-            marginBottom: "0.4rem",
-          }}
-        >
-          {Category}
-        </div>
+        {Category && (
+          <div
+            style={{
+              fontSize: "0.7rem",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "var(--color-primary)",
+              marginBottom: "0.4rem",
+            }}
+          >
+            {Category}
+          </div>
+        )}
         <h3
           className="font-cormorant"
           style={{
@@ -108,7 +110,7 @@ export default function ProjectCard({ project, index = 0 }) {
             marginBottom: "0.3rem",
           }}
         >
-          {title}
+          {title || "Untitled Project"}
         </h3>
         {Location && (
           <p

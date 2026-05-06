@@ -182,9 +182,11 @@ export default function ProjectDetails() {
           >
             {/* Meta sidebar */}
             <div>
-              <p className="text-micro" style={{ color: "var(--color-primary)", marginBottom: "0.5rem" }}>
-                {data.Category}
-              </p>
+              {data.Category && (
+                <p className="text-micro" style={{ color: "var(--color-primary)", marginBottom: "0.5rem" }}>
+                  {data.Category}
+                </p>
+              )}
               <h1
                 className="font-cormorant"
                 style={{
@@ -195,7 +197,7 @@ export default function ProjectDetails() {
                   marginBottom: "2.5rem",
                 }}
               >
-                {data.title}
+                {data.title || "Untitled Project"}
               </h1>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>

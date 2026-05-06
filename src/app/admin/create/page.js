@@ -1,26 +1,25 @@
 "use client";
 import axios from "axios";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
+const CATEGORIES = ["Architecture", "Interior Design", "Retail Design", "Commercial", "Residential"];
+
 const FIELDS = [
   { key: "client", label: "Client", placeholder: "e.g. John Doe" },
-  { key: "category", label: "Category", placeholder: "e.g. Residential" },
-  { key: "location", label: "Location", placeholder: "e.g. Melbourne, AU" },
+  { key: "location", label: "Location", placeholder: "e.g. Ahmedabad, IN" },
   { key: "date", label: "Date", placeholder: "e.g. 2024" },
-  { key: "link", label: "Link", placeholder: "e.g. https://..." },
   { key: "title", label: "Title", placeholder: "Project title" },
 ];
 
-function Field({ label, value, onChange, placeholder, required = true }) {
+function Field({ label, value, onChange, placeholder }) {
   return (
     <div className="flex flex-col gap-1.5">
       <label className="text-sm font-medium text-gray-700">{label}</label>
       <input
         type="text"
-        required={required}
+        required
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
@@ -34,9 +33,9 @@ export default function AdminCreate() {
   const [form, setForm] = useState({
     client: "", category: "", location: "", date: "", link: "", title: "", description: "",
   });
-  const [coverImage, setCoverImage] = useState(null);
+  const [coverPreview, setCoverPreview] = useState("");
   const [coverBase64, setCoverBase64] = useState("");
-  const [galleryImages, setGalleryImages] = useState([]);
+  const [galleryPreviews, setGalleryPreviews] = useState([]);
   const [galleryBase64, setGalleryBase64] = useState([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -48,11 +47,10 @@ export default function AdminCreate() {
   function handleCoverChange(e) {
     const file = e.target.files[0];
     if (!file) return;
-    setCoverImage(file);
     const reader = new FileReader();
     reader.onloadend = () => {
-      const b64 = reader.result.replace(/^data:image\/(jpeg|jpg|png|webp);base64,/, "");
-      setCoverBase64(b64);
+      setCoverPreview(reader.result);
+      setCoverBase64(reader.result.replace(/^data:image\/(jpeg|jpg|png|webp);base64,/, ""));
     };
     reader.readAsDataURL(file);
   }
@@ -60,10 +58,10 @@ export default function AdminCreate() {
   function handleGalleryChange(e) {
     const files = Array.from(e.target.files);
     if (!files.length) return;
-    setGalleryImages((prev) => [...prev, ...files]);
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
+        setGalleryPreviews((prev) => [...prev, reader.result]);
         setGalleryBase64((prev) => [...prev, reader.result]);
       };
       reader.readAsDataURL(file);
@@ -72,7 +70,7 @@ export default function AdminCreate() {
   }
 
   function removeGalleryImage(index) {
-    setGalleryImages((prev) => prev.filter((_, i) => i !== index));
+    setGalleryPreviews((prev) => prev.filter((_, i) => i !== index));
     setGalleryBase64((prev) => prev.filter((_, i) => i !== index));
   }
 
@@ -97,9 +95,9 @@ export default function AdminCreate() {
       });
       toast.success("Project created successfully");
       setForm({ client: "", category: "", location: "", date: "", link: "", title: "", description: "" });
-      setCoverImage(null);
+      setCoverPreview("");
       setCoverBase64("");
-      setGalleryImages([]);
+      setGalleryPreviews([]);
       setGalleryBase64([]);
     } catch {
       toast.error("Error creating project");
@@ -136,10 +134,43 @@ export default function AdminCreate() {
                 placeholder={f.placeholder}
               />
             ))}
-            <div className="sm:col-span-2 flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-gray-700">Description</label>
-              <textarea
+
+            {/* Category dropdown */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-gray-700">Category</label>
+              <select
                 required
+                value={form.category}
+                onChange={(e) => setField("category", e.target.value)}
+                className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white"
+              >
+                <option value="">Select category</option>
+                {CATEGORIES.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Link — optional */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-gray-700">
+                Link <span className="text-gray-400 font-normal text-xs">(optional)</span>
+              </label>
+              <input
+                type="text"
+                value={form.link}
+                onChange={(e) => setField("link", e.target.value)}
+                placeholder="e.g. https://..."
+                className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white"
+              />
+            </div>
+
+            {/* Description — optional */}
+            <div className="sm:col-span-2 flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-gray-700">
+                Description <span className="text-gray-400 font-normal text-xs">(optional)</span>
+              </label>
+              <textarea
                 rows={4}
                 value={form.description}
                 onChange={(e) => setField("description", e.target.value)}
@@ -158,14 +189,9 @@ export default function AdminCreate() {
             onClick={() => document.getElementById("cover").click()}
             className="relative h-52 w-full border-2 border-dashed border-gray-200 rounded-xl overflow-hidden cursor-pointer hover:border-blue-400 transition group"
           >
-            {coverImage ? (
+            {coverPreview ? (
               <>
-                <Image
-                  src={URL.createObjectURL(coverImage)}
-                  alt="Cover preview"
-                  fill
-                  className="object-cover"
-                />
+                <img src={coverPreview} alt="Cover preview" className="object-cover w-full h-full" />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                   <span className="text-white text-sm font-medium">Click to change</span>
                 </div>
@@ -182,10 +208,10 @@ export default function AdminCreate() {
               </div>
             )}
           </div>
-          {coverImage && (
+          {coverPreview && (
             <button
               type="button"
-              onClick={() => { setCoverImage(null); setCoverBase64(""); }}
+              onClick={() => { setCoverPreview(""); setCoverBase64(""); }}
               className="mt-3 text-xs text-red-500 hover:text-red-700"
             >
               Remove cover image
@@ -199,14 +225,9 @@ export default function AdminCreate() {
           <p className="text-xs text-gray-400 mb-5">Add multiple images to the project gallery</p>
           <input type="file" id="gallery" accept="image/*" multiple onChange={handleGalleryChange} className="hidden" />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {galleryImages.map((img, i) => (
+            {galleryPreviews.map((src, i) => (
               <div key={i} className="relative group h-32 rounded-xl overflow-hidden border border-gray-100">
-                <Image
-                  src={URL.createObjectURL(img)}
-                  alt={`Gallery ${i + 1}`}
-                  fill
-                  className="object-cover"
-                />
+                <img src={src} alt={`Gallery ${i + 1}`} className="object-cover w-full h-full" />
                 <button
                   type="button"
                   onClick={() => removeGalleryImage(i)}

@@ -5,12 +5,12 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
+const CATEGORIES = ["Architecture", "Interior Design", "Retail Design", "Commercial", "Residential"];
+
 const FIELDS = [
   { key: "Client", label: "Client", placeholder: "e.g. John Doe" },
-  { key: "Category", label: "Category", placeholder: "e.g. Residential" },
-  { key: "Location", label: "Location", placeholder: "e.g. Melbourne, AU" },
+  { key: "Location", label: "Location", placeholder: "e.g. Ahmedabad, IN" },
   { key: "Date", label: "Date", placeholder: "e.g. 2024" },
-  { key: "Link", label: "Link", placeholder: "e.g. https://..." },
   { key: "title", label: "Title", placeholder: "Project title" },
 ];
 
@@ -139,10 +139,43 @@ export default function EditProject() {
                 placeholder={f.placeholder}
               />
             ))}
-            <div className="sm:col-span-2 flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-gray-700">Description</label>
-              <textarea
+
+            {/* Category dropdown */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-gray-700">Category</label>
+              <select
                 required
+                value={form.Category}
+                onChange={(e) => setField("Category", e.target.value)}
+                className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white"
+              >
+                <option value="">Select category</option>
+                {CATEGORIES.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Link — optional */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-gray-700">
+                Link <span className="text-gray-400 font-normal text-xs">(optional)</span>
+              </label>
+              <input
+                type="text"
+                value={form.Link}
+                onChange={(e) => setField("Link", e.target.value)}
+                placeholder="e.g. https://..."
+                className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white"
+              />
+            </div>
+
+            {/* Description — optional */}
+            <div className="sm:col-span-2 flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-gray-700">
+                Description <span className="text-gray-400 font-normal text-xs">(optional)</span>
+              </label>
+              <textarea
                 rows={4}
                 value={form.description}
                 onChange={(e) => setField("description", e.target.value)}
